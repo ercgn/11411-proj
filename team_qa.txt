@@ -1,0 +1,181 @@
+team_id	qns_id	article_title	path	qns_difficulty_by_questioner	qns_text	is_disfluent?	is_bad_qns?	answer	qns_difficulty_by_answerer
+Error 501: Not Yet Implemented	1	Aries_(constellation)	set2/a4	hard	What are the brightest stars in Aries?	False	False	Alpha, Beta, Gamma Arietis	medium
+Error 501: Not Yet Implemented	1	Aries_(constellation)	set2/a4	hard	What are the brightest stars in Aries?	False	False	Alpha, Beta, and Gamma Arietis	medium
+Error 501: Not Yet Implemented	2	Aries_(constellation)	set2/a4	hard	How many galaxies are contained within Aries?	False	False	several pairs	hard
+Error 501: Not Yet Implemented	2	Aries_(constellation)	set2/a4	hard	How many galaxies are contained within Aries?	False	False	11?	too hard
+Error 501: Not Yet Implemented	3	Aries_(constellation)	set2/a4	hard	What meteor showers occur in Aries?	False	False	Daytime Arietid, Delta Arietids, Autumn Arietids	hard
+Error 501: Not Yet Implemented	3	Aries_(constellation)	set2/a4	hard	What meteor showers occur in Aries?	False	False	Daytime Arietids and Epsilon Arietids	medium
+Error 501: Not Yet Implemented	4	Aries_(constellation)	set2/a4	medium	Where is Aries located?	False	False	Northern Hemisphere	medium
+Error 501: Not Yet Implemented	4	Aries_(constellation)	set2/a4	medium	Where is Aries located?	False	False	Northern Hemisphere between Pisces and Taurus 	medium
+Error 501: Not Yet Implemented	5	Aries_(constellation)	set2/a4	medium	What is the earliest mention of Aries?	False	False	bondary stones in 1350 to 1000 BCE	hard
+Error 501: Not Yet Implemented	5	Aries_(constellation)	set2/a4	medium	What is the earliest mention of Aries?	False	False	boundary stones	medium
+Error 501: Not Yet Implemented	6	Aries_(constellation)	set2/a4	medium	What is the animal represented by Aries?	False	False	ram	medium
+Error 501: Not Yet Implemented	6	Aries_(constellation)	set2/a4	medium	What is the animal represented by Aries?	False	False	ram	hard
+Error 501: Not Yet Implemented	7	Aries_(constellation)	set2/a4	easy	Is Aries a constellation of the zodiac?	False	False	yes	easy
+Error 501: Not Yet Implemented	7	Aries_(constellation)	set2/a4	easy	Is Aries a constellation of the zodiac?	False	False	yes	easy
+Error 501: Not Yet Implemented	8	Aries_(constellation)	set2/a4	easy	Is Aries the largest constellation?	False	False	no	easy
+Error 501: Not Yet Implemented	8	Aries_(constellation)	set2/a4	easy	Is Aries the largest constellation?	False	False	no	hard
+Error 501: Not Yet Implemented	9	Aries_(constellation)	set2/a4	easy	Is Epsilon Arietis part of Aries?	False	False	no	easy
+Error 501: Not Yet Implemented	9	Aries_(constellation)	set2/a4	easy	Is Epsilon Arietis part of Aries?	False	False	no	easy
+Error 501: Not Yet Implemented	10	AndrÃ©s_Iniesta	set1/a4	hard	In what year could Iniesta leave his current contract?	False	False	2014	hard
+Error 501: Not Yet Implemented	10	AndrÃ©s_Iniesta	set1/a4	hard	In what year could Iniesta leave his current contract?	False	False	2015	hard
+Error 501: Not Yet Implemented	11	AndrÃ©s_Iniesta	set1/a4	hard	Is iniesta single?	False	False	no	medium
+Error 501: Not Yet Implemented	11	AndrÃ©s_Iniesta	set1/a4	hard	Is iniesta single?	False	False	no	hard
+Error 501: Not Yet Implemented	12	AndrÃ©s_Iniesta	set1/a4	hard	In what international competition did Iniesta score the winning goal?	False	False	2010 World Cup	medium
+Error 501: Not Yet Implemented	12	AndrÃ©s_Iniesta	set1/a4	hard	In what international competition did Iniesta score the winning goal?	False	False	2010 FIFA World Cup	medium
+Error 501: Not Yet Implemented	13	AndrÃ©s_Iniesta	set1/a4	medium	What year did rumors surface of Iniesta moving to Real Madrid?	False	False	2007	hard
+Error 501: Not Yet Implemented	13	AndrÃ©s_Iniesta	set1/a4	medium	What year did rumors surface of Iniesta moving to Real Madrid?	False	False	19 July 2007	hard
+Error 501: Not Yet Implemented	14	AndrÃ©s_Iniesta	set1/a4	medium	Against what country did Inieta win his first cap? 	False	False	Russia	medium
+Error 501: Not Yet Implemented	14	AndrÃ©s_Iniesta	set1/a4	medium	Against what country did Inieta win his first cap? 	False	False	Russia	medium
+Error 501: Not Yet Implemented	15	AndrÃ©s_Iniesta	set1/a4	medium	What friend did Iniesta honor after winning the 2010 FIFA World Cup?	False	False	Daniel Jarque	hard
+Error 501: Not Yet Implemented	15	AndrÃ©s_Iniesta	set1/a4	medium	What friend did Iniesta honor after winning the 2010 FIFA World Cup?	False	False	Daniel Jarque	hard
+Error 501: Not Yet Implemented	16	AndrÃ©s_Iniesta	set1/a4	easy	DId Iniesta play for Real Madrid?	False	False	no	easy
+Error 501: Not Yet Implemented	16	AndrÃ©s_Iniesta	set1/a4	easy	DId Iniesta play for Real Madrid?	False	False	no	easy
+Error 501: Not Yet Implemented	17	AndrÃ©s_Iniesta	set1/a4	easy	Was Iniesta trained at the Barcelona youth academy?	False	False	yes	easy
+Error 501: Not Yet Implemented	17	AndrÃ©s_Iniesta	set1/a4	easy	Was Iniesta trained at the Barcelona youth academy?	False	False	yes	easy
+Error 501: Not Yet Implemented	18	AndrÃ©s_Iniesta	set1/a4	easy	Has Iniesta ever made the FIFA World Cup All-Star Team?	False	False	yes	easy
+Error 501: Not Yet Implemented	18	AndrÃ©s_Iniesta	set1/a4	easy	Has Iniesta ever made the FIFA World Cup All-Star Team?	False	False	yes	easy
+Error 501: Not Yet Implemented	19	Orion_(constellation)	set2/a6	hard	When would be a good time to view Orion in the Northern Hemisphere?	False	False	late autumn to winter	hard
+Error 501: Not Yet Implemented	19	Orion_(constellation)	set2/a6	hard	When would be a good time to view Orion in the Northern Hemisphere?	False	False	during the month of January around 9:00 pm.	medium
+Error 501: Not Yet Implemented	20	Orion_(constellation)	set2/a6	hard	How would you find the star Sirius using the constellation Orion?	False	False	by extending the line of the Belt southeastward	hard
+Error 501: Not Yet Implemented	20	Orion_(constellation)	set2/a6	hard	How would you find the star Sirius using the constellation Orion?	False	False	By extending the line of the Belt southwestward	hard
+Error 501: Not Yet Implemented	21	Orion_(constellation)	set2/a6	hard	Is Alnitak brighter than Alnilam? 	False	False	no	hard
+Error 501: Not Yet Implemented	21	Orion_(constellation)	set2/a6	hard	Is Alnitak brighter than Alnilam? 	True	False	yes	hard
+Error 501: Not Yet Implemented	22	Orion_(constellation)	set2/a6	medium	Which star did J.K. Rowling name one of her characters after?	False	False	Bellatrix Lestrange	medium
+Error 501: Not Yet Implemented	22	Orion_(constellation)	set2/a6	medium	Which star did J.K. Rowling name one of her characters after?	False	False	gamma star	medium
+Error 501: Not Yet Implemented	23	Orion_(constellation)	set2/a6	medium	How many stars are in Orion's Belt? 	False	False	Three	medium
+Error 501: Not Yet Implemented	23	Orion_(constellation)	set2/a6	medium	How many stars are in Orion's Belt? 	False	False	three	medium
+Error 501: Not Yet Implemented	24	Orion_(constellation)	set2/a6	medium	Which star in the costellation is red? 	False	False	Betelgeuse	hard
+Error 501: Not Yet Implemented	24	Orion_(constellation)	set2/a6	medium	Which star in the costellation is red? 	False	False	Betelgeuse	medium
+Error 501: Not Yet Implemented	25	Orion_(constellation)	set2/a6	easy	Does the Orion Nebula make up part of the hunter's sword?	False	False	yes	hard
+Error 501: Not Yet Implemented	25	Orion_(constellation)	set2/a6	easy	Does the Orion Nebula make up part of the hunter's sword?	False	False	yes	easy
+Error 501: Not Yet Implemented	26	Orion_(constellation)	set2/a6	easy	Did Johann Bayer refer to Alnitak as Zeta Orionis?	False	False	yes	medium
+Error 501: Not Yet Implemented	26	Orion_(constellation)	set2/a6	easy	Did Johann Bayer refer to Alnitak as Zeta Orionis?	False	False	yes	easy
+Error 501: Not Yet Implemented	27	Orion_(constellation)	set2/a6	easy	Is Mintaka brighter than the sun? 	False	False	yes	easy
+Error 501: Not Yet Implemented	27	Orion_(constellation)	set2/a6	easy	Is Mintaka brighter than the sun? 	False	False	no	hard
+Error 501: Not Yet Implemented	28	Perl	set3/a8	hard	What animal became the unofficial symbol for Perl?	False	False	a camel	medium
+Error 501: Not Yet Implemented	28	Perl	set3/a8	hard	What animal became the unofficial symbol for Perl?	False	False	camel	hard
+Error 501: Not Yet Implemented	29	Perl	set3/a8	hard	Do scalars, arrays, and hashes use same leading sigils?	False	False	no	hard
+Error 501: Not Yet Implemented	29	Perl	set3/a8	hard	Do scalars, arrays, and hashes use same leading sigils?	False	False	yes	medium
+Error 501: Not Yet Implemented	30	Perl	set3/a8	hard	Does Perl do data-type checking? 	False	False	yes	easy
+Error 501: Not Yet Implemented	30	Perl	set3/a8	hard	Does Perl do data-type checking? 	False	False	no	medium
+Error 501: Not Yet Implemented	31	Perl	set3/a8	medium	According to Wall, What was the first of Perl's two slogans?	False	False	There's more than one way to do it	medium
+Error 501: Not Yet Implemented	31	Perl	set3/a8	medium	According to Wall, What was the first of Perl's two slogans?	False	False	There's more than one way to do it.	medium
+Error 501: Not Yet Implemented	32	Perl	set3/a8	medium	When was Perl 5.12.0 released?	False	False	April 12, 2010	medium
+Error 501: Not Yet Implemented	32	Perl	set3/a8	medium	When was Perl 5.12.0 released?	False	False	April 12,2010	medium
+Error 501: Not Yet Implemented	33	Perl	set3/a8	medium	Who originally developed Perl?	False	False	Larry Wall	medium
+Error 501: Not Yet Implemented	33	Perl	set3/a8	medium	Who originally developed Perl?	False	False	Larry Wall	medium
+Error 501: Not Yet Implemented	34	Perl	set3/a8	easy	Is Perl a programming language?	False	False	yes	easy
+Error 501: Not Yet Implemented	34	Perl	set3/a8	easy	Is Perl a programming language?	False	False	yes	easy
+Error 501: Not Yet Implemented	35	Perl	set3/a8	easy	Was Perl originally named "Pearl"?	False	False	yes	easy
+Error 501: Not Yet Implemented	35	Perl	set3/a8	easy	Was Perl originally named "Pearl"?	False	False	yes	easy
+Error 501: Not Yet Implemented	36	Perl	set3/a8	easy	Was Perl 5.18 released on May 20, 2012?	False	False	not enough information	easy
+Error 501: Not Yet Implemented	36	Perl	set3/a8	easy	Was Perl 5.18 released on May 20, 2012?	False	False	no	easy
+Error 501: Not Yet Implemented	37	John_Terry	set1/a10	hard	In his early career, why did John Terry decide to play the centre-back position?	False	False	a shortage of central defenders	hard
+Error 501: Not Yet Implemented	37	John_Terry	set1/a10	hard	In his early career, why did John Terry decide to play the centre-back position?	False	False	shortage of central defenders	hard
+Error 501: Not Yet Implemented	38	John_Terry	set1/a10	hard	Which country does he represent? 	False	False	England	hard
+Error 501: Not Yet Implemented	38	John_Terry	set1/a10	hard	Which country does he represent? 	False	False	England	hard
+Error 501: Not Yet Implemented	39	John_Terry	set1/a10	hard	Which position does John Terry play?	False	False	centre back position	medium
+Error 501: Not Yet Implemented	39	John_Terry	set1/a10	hard	Which position does John Terry play?	False	False	centre back	medium
+Error 501: Not Yet Implemented	40	John_Terry	set1/a10	medium	What sport does he play? 	False	False	football	medium
+Error 501: Not Yet Implemented	40	John_Terry	set1/a10	medium	What sport does he play? 	False	False	football	hard
+Error 501: Not Yet Implemented	41	John_Terry	set1/a10	medium	Where was he born?	False	False	Barking, east London	medium
+Error 501: Not Yet Implemented	41	John_Terry	set1/a10	medium	Where was he born?	False	False	Barking	medium
+Error 501: Not Yet Implemented	42	John_Terry	set1/a10	medium	Where does Terry currently live?	False	False	Oxshott, Surrey	medium
+Error 501: Not Yet Implemented	42	John_Terry	set1/a10	medium	Where does Terry currently live?	False	False	Oxshott, Surrey	medium
+Error 501: Not Yet Implemented	43	John_Terry	set1/a10	easy	Did he attend Eastbury Comprehensive School?	False	False	yes	easy
+Error 501: Not Yet Implemented	43	John_Terry	set1/a10	easy	Did he attend Eastbury Comprehensive School?	False	False	yes	easy
+Error 501: Not Yet Implemented	44	John_Terry	set1/a10	easy	Did he announce that he had retired from international football on 23 September 2012?	False	False	yes	easy
+Error 501: Not Yet Implemented	44	John_Terry	set1/a10	easy	Did he announce that he had retired from international football on 23 September 2012?	False	False	yes	easy
+Error 501: Not Yet Implemented	45	John_Terry	set1/a10	easy	Did he move to Chelsea at 14?	False	False	yes	easy
+Error 501: Not Yet Implemented	45	John_Terry	set1/a10	easy	Did he move to Chelsea at 14?	False	False	yes	easy
+Error 501: Not Yet Implemented	46	Million_Dollar_Baby	set4/a4	hard	What is Million Dollar Baby about?	False	False	the American Dream	too hard
+Error 501: Not Yet Implemented	46	Million_Dollar_Baby	set4/a4	hard	What is Million Dollar Baby about?	True	False	(answer too long)	hard
+Error 501: Not Yet Implemented	47	Million_Dollar_Baby	set4/a4	hard	How much did Million Dollar Baby cost to produce?	False	False	$30 million	too hard
+Error 501: Not Yet Implemented	47	Million_Dollar_Baby	set4/a4	hard	How much did Million Dollar Baby cost to produce?	False	False	$30 million	hard
+Error 501: Not Yet Implemented	48	Million_Dollar_Baby	set4/a4	hard	Where does Million Dollar Baby take place?	False	False	Los Angeles	too hard
+Error 501: Not Yet Implemented	48	Million_Dollar_Baby	set4/a4	hard	Where does Million Dollar Baby take place?	False	False	Missouri	hard
+Error 501: Not Yet Implemented	49	Million_Dollar_Baby	set4/a4	medium	Who plays Frankie Dunn in Million Dollar Baby?	False	False	Clint Eastwood	medium
+Error 501: Not Yet Implemented	49	Million_Dollar_Baby	set4/a4	medium	Who plays Frankie Dunn in Million Dollar Baby?	False	False	Clint Eastwood	medium
+Error 501: Not Yet Implemented	50	Million_Dollar_Baby	set4/a4	medium	When was Million Dollar Baby released on DVD?	False	False	July 12, 2005	medium
+Error 501: Not Yet Implemented	50	Million_Dollar_Baby	set4/a4	medium	When was Million Dollar Baby released on DVD?	False	False	July 12, 2005	medium
+Error 501: Not Yet Implemented	51	Million_Dollar_Baby	set4/a4	medium	Who directed Million Dollar Baby?	False	False	Clint Eastwood	hard
+Error 501: Not Yet Implemented	51	Million_Dollar_Baby	set4/a4	medium	Who directed Million Dollar Baby?	False	False	Clint Eastwood	medium
+Error 501: Not Yet Implemented	52	Million_Dollar_Baby	set4/a4	easy	Did Hilary Swank appear in Million Dollar Baby?	False	False	yes	easy
+Error 501: Not Yet Implemented	52	Million_Dollar_Baby	set4/a4	easy	Did Hilary Swank appear in Million Dollar Baby?	False	False	yes	easy
+Error 501: Not Yet Implemented	53	Million_Dollar_Baby	set4/a4	easy	Did Million Dollar Baby win any Academy Awards?	False	False	four	medium
+Error 501: Not Yet Implemented	53	Million_Dollar_Baby	set4/a4	easy	Did Million Dollar Baby win any Academy Awards?	False	False	yes	easy
+Error 501: Not Yet Implemented	54	Million_Dollar_Baby	set4/a4	easy	Was Million Dollar Baby filmed in Los Angeles?	False	False	yes	medium
+Error 501: Not Yet Implemented	54	Million_Dollar_Baby	set4/a4	easy	Was Million Dollar Baby filmed in Los Angeles?	False	False	yes	easy
+Error 501: Not Yet Implemented	55	Hope_Solo	set1/a5	hard	Who was Solo's coach during the Olympics?	False	False	Greg Ryan	too hard
+Error 501: Not Yet Implemented	55	Hope_Solo	set1/a5	hard	Who was Solo's coach during the Olympics?	True	False		too hard
+Error 501: Not Yet Implemented	56	Hope_Solo	set1/a5	hard	Why did Solo receive a warning?	False	False	urine test concluded the banned substance Canrenone had been detected	hard
+Error 501: Not Yet Implemented	56	Hope_Solo	set1/a5	hard	Why did Solo receive a warning?	True	False	she tested positive with a banned substance from a prescription medicine	hard
+Error 501: Not Yet Implemented	57	Hope_Solo	set1/a5	hard	Did Solo play soccer during high school?	False	False	yes	easy
+Error 501: Not Yet Implemented	57	Hope_Solo	set1/a5	hard	Did Solo play soccer during high school?	False	False	yes	hard
+Error 501: Not Yet Implemented	58	Hope_Solo	set1/a5	medium	How many Olympic gold medals has Solo won?	False	False	two	medium
+Error 501: Not Yet Implemented	58	Hope_Solo	set1/a5	medium	How many Olympic gold medals has Solo won?	False	False	2	medium
+Error 501: Not Yet Implemented	59	Hope_Solo	set1/a5	medium	What year was Solo's first Olympics?	False	False	2004	medium
+Error 501: Not Yet Implemented	59	Hope_Solo	set1/a5	medium	What year was Solo's first Olympics?	False	False	2004	hard
+Error 501: Not Yet Implemented	60	Hope_Solo	set1/a5	medium	When did Solo join the Seattle Sounders?	False	False	yes	easy
+Error 501: Not Yet Implemented	60	Hope_Solo	set1/a5	medium	When did Solo join the Seattle Sounders?	False	False	February 14, 2012	hard
+Error 501: Not Yet Implemented	61	Hope_Solo	set1/a5	easy	Did Solo attend the University of Washington?	False	False	yes	easy
+Error 501: Not Yet Implemented	61	Hope_Solo	set1/a5	easy	Did Solo attend the University of Washington?	False	False	Yes	easy
+Error 501: Not Yet Implemented	62	Hope_Solo	set1/a5	easy	Has Solo appeared in Dancing with the Stars?	False	False	yes	medium
+Error 501: Not Yet Implemented	62	Hope_Solo	set1/a5	easy	Has Solo appeared in Dancing with the Stars?	False	False	Yes	easy
+Error 501: Not Yet Implemented	63	Hope_Solo	set1/a5	easy	Did Solo play in the Women's Professional Soccer league?	False	False	yes	easy
+Error 501: Not Yet Implemented	63	Hope_Solo	set1/a5	easy	Did Solo play in the Women's Professional Soccer league?	False	False	yes	easy
+Error 501: Not Yet Implemented	64	Ophiuchus	set2/a7	hard	What constellations border Ophiuchus?	False	False	Aquila, Serpens, Hercules, Scorpius, Sagittarius	hard
+Error 501: Not Yet Implemented	64	Ophiuchus	set2/a7	hard	What constellations border Ophiuchus?	False	False	Aquila, Serpens, and Hercules	hard
+Error 501: Not Yet Implemented	65	Ophiuchus	set2/a7	hard	Is Ophiuchus its own sign in the zodiac?	False	False	no	hard
+Error 501: Not Yet Implemented	65	Ophiuchus	set2/a7	hard	Is Ophiuchus its own sign in the zodiac?	False	False	no	hard
+Error 501: Not Yet Implemented	66	Ophiuchus	set2/a7	hard	Does the constellation containe a recurrent novae star?	False	False	yes	easy
+Error 501: Not Yet Implemented	66	Ophiuchus	set2/a7	hard	Does the constellation containe a recurrent novae star?	False	True	yes	medium
+Error 501: Not Yet Implemented	67	Ophiuchus	set2/a7	medium	Can the constellation be fully viewed in Anchorage? 	False	False	no	medium
+Error 501: Not Yet Implemented	67	Ophiuchus	set2/a7	medium	Can the constellation be fully viewed in Anchorage? 	False	False	no	easy
+Error 501: Not Yet Implemented	68	Ophiuchus	set2/a7	medium	What astronomical occurance did Kepler observer near theta Opiuchi?	False	False	the supernova of 1604	hard
+Error 501: Not Yet Implemented	68	Ophiuchus	set2/a7	medium	What astronomical occurance did Kepler observer near theta Opiuchi?	False	True	supernova	hard
+Error 501: Not Yet Implemented	69	Ophiuchus	set2/a7	medium	Is Rasalhague one of Opiuchus's brightest stars?	False	False	yes	easy
+Error 501: Not Yet Implemented	69	Ophiuchus	set2/a7	medium	Is Rasalhague one of Opiuchus's brightest stars?	False	False	yes	easy
+Error 501: Not Yet Implemented	70	Ophiuchus	set2/a7	easy	Does Ophiuchus contan the star cluster M9?	False	False	yes	easy
+Error 501: Not Yet Implemented	70	Ophiuchus	set2/a7	easy	Does Ophiuchus contan the star cluster M9?	False	False	Yes	easy
+Error 501: Not Yet Implemented	71	Ophiuchus	set2/a7	easy	Is the name of the constellation derived from the Greek language?	False	False	yes	easy
+Error 501: Not Yet Implemented	71	Ophiuchus	set2/a7	easy	Is the name of the constellation derived from the Greek language?	False	False	yes	easy
+Error 501: Not Yet Implemented	72	Ophiuchus	set2/a7	easy	Was the constellation formally called Scorpius?	False	False	no	easy
+Error 501: Not Yet Implemented	72	Ophiuchus	set2/a7	easy	Was the constellation formally called Scorpius?	False	True	no (check your spelling)	easy
+Error 501: Not Yet Implemented	73	David_Beckham	set1/a6	hard	Why was Beckham able to use the number 7 jersey starting in 1997?	False	False	Eric Cantona retired and left the jersey free	hard
+Error 501: Not Yet Implemented	73	David_Beckham	set1/a6	hard	Why was Beckham able to use the number 7 jersey starting in 1997?	False	False	Eric Cantona retired as a player.	hard
+Error 501: Not Yet Implemented	74	David_Beckham	set1/a6	hard	Was Beckham's wife a member of the Spice Girls?	False	False	yes	hard
+Error 501: Not Yet Implemented	74	David_Beckham	set1/a6	hard	Was Beckham's wife a member of the Spice Girls?	False	False	yes	hard
+Error 501: Not Yet Implemented	75	David_Beckham	set1/a6	hard	Is Beckham the English record holder for number of caps?	False	False	no	hard
+Error 501: Not Yet Implemented	75	David_Beckham	set1/a6	hard	Is Beckham the English record holder for number of caps?	False	False	no	hard
+Error 501: Not Yet Implemented	76	David_Beckham	set1/a6	medium	In what language is Beckham's tattoo of a Bible verse written?	False	False	Hebrew	medium
+Error 501: Not Yet Implemented	76	David_Beckham	set1/a6	medium	In what language is Beckham's tattoo of a Bible verse written?	False	False	Hebrew	medium
+Error 501: Not Yet Implemented	77	David_Beckham	set1/a6	medium	When did Beckham break a bone in his left foot? 	False	False	April 10, 2002	medium
+Error 501: Not Yet Implemented	77	David_Beckham	set1/a6	medium	When did Beckham break a bone in his left foot? 	False	False	10 April 2002	medium
+Error 501: Not Yet Implemented	78	David_Beckham	set1/a6	medium	What was the first team Beckham played with professionally?	False	False	Manchester United	medium
+Error 501: Not Yet Implemented	78	David_Beckham	set1/a6	medium	What was the first team Beckham played with professionally?	False	False	Manchester United	medium
+Error 501: Not Yet Implemented	79	David_Beckham	set1/a6	easy	Did Beckham play for Liverpool FC?	False	False	no	easy
+Error 501: Not Yet Implemented	79	David_Beckham	set1/a6	easy	Did Beckham play for Liverpool FC?	False	False	no	easy
+Error 501: Not Yet Implemented	80	David_Beckham	set1/a6	easy	Was Brooklyn Beckham born in Los Angeles?	False	False	no	easy
+Error 501: Not Yet Implemented	80	David_Beckham	set1/a6	easy	Was Brooklyn Beckham born in Los Angeles?	False	False	No	easy
+Error 501: Not Yet Implemented	81	David_Beckham	set1/a6	easy	Does Beckham have a daughter?	False	False	yes	easy
+Error 501: Not Yet Implemented	81	David_Beckham	set1/a6	easy	Does Beckham have a daughter?	False	False	yes	easy
+Error 501: Not Yet Implemented	82	Spanish_language	set3/a4	hard	What is another name for the language "Spanish"?	False	False	Castilian	medium
+Error 501: Not Yet Implemented	82	Spanish_language	set3/a4	hard	What is another name for the language "Spanish"?	False	False	catellano	medium
+Error 501: Not Yet Implemented	83	Spanish_language	set3/a4	hard	Which countries is the name castellano preferred in Spanish-speaking South American countries?	False	True		
+Error 501: Not Yet Implemented	83	Spanish_language	set3/a4	hard	Which countries is the name castellano preferred in Spanish-speaking South American countries?	False	False	all except columbia	hard
+Error 501: Not Yet Implemented	84	Spanish_language	set3/a4	hard	Which Spanish dialect is most commonly spoken?	False	False	Mexican Spanish	hard
+Error 501: Not Yet Implemented	84	Spanish_language	set3/a4	hard	Which Spanish dialect is most commonly spoken?	False	False	Basque	hard
+Error 501: Not Yet Implemented	85	Spanish_language	set3/a4	medium	What language did Spanish evolve from?	False	False	several dialects of spoken Latin	hard
+Error 501: Not Yet Implemented	85	Spanish_language	set3/a4	medium	What language did Spanish evolve from?	False	False	Latin	medium
+Error 501: Not Yet Implemented	86	Spanish_language	set3/a4	medium	Over how many fluent second language speakers are in both Brazil and United States?	False	False	10,000,000	medium
+Error 501: Not Yet Implemented	86	Spanish_language	set3/a4	medium	Over how many fluent second language speakers are in both Brazil and United States?	False	False	over 10,000,000	medium
+Error 501: Not Yet Implemented	87	Spanish_language	set3/a4	medium	When was Spanish taken to America and the Spanish East indies?	False	False	From the sixteenth century onwards	medium
+Error 501: Not Yet Implemented	87	Spanish_language	set3/a4	medium	When was Spanish taken to America and the Spanish East indies?	False	False	Sixteenth Century Onwards	hard
+Error 501: Not Yet Implemented	88	Spanish_language	set3/a4	easy	Is Spanish the most widely understood language in the Western Hemisphere?	False	False	yes	easy
+Error 501: Not Yet Implemented	88	Spanish_language	set3/a4	easy	Is Spanish the most widely understood language in the Western Hemisphere?	False	False	yes	easy
+Error 501: Not Yet Implemented	89	Spanish_language	set3/a4	easy	Is Spanish a syllable-timed language?	False	False	yes	easy
+Error 501: Not Yet Implemented	89	Spanish_language	set3/a4	easy	Is Spanish a syllable-timed language?	False	False	yes	easy
+Error 501: Not Yet Implemented	90	Spanish_language	set3/a4	easy	Are most Spanish speakers in Latin America?	False	False	yes	easy
+Error 501: Not Yet Implemented	90	Spanish_language	set3/a4	easy	Are most Spanish speakers in Latin America?	False	False	yes	easy
