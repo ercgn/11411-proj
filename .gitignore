@@ -37,3 +37,5 @@ nosetests.xml
 
 #Misc
 .DS_Store
+*.swp
+*.swo
