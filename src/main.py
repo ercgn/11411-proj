@@ -13,7 +13,9 @@ def driver(articlefd, testfd):
         Parser.feed(buf)
         buf = articlefd.readline()
     
-    print Parser.grabText()
+    print "List of topics:"
+    print Parser.grabTopicList()
+    
 
 if __name__ == '__main__':
     
