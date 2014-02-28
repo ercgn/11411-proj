@@ -71,7 +71,7 @@ class EnRDRTree(PosTaggingRDRTree):
 # 
 # for instance:
 #   python EnPOS.py ../Trained/EN.RDR ../Trained/EN.DICT ../testTagger.txt out.txt
-
+"""
 def findPOS(model, lexicon, inFile, outFile):
     r = EnRDRTree();
     r.constructTreeFromRulesFile(model);
@@ -108,3 +108,4 @@ if __name__ == "__main__":
     runEnRDRPOSTagger()
     pass
 
+"""
