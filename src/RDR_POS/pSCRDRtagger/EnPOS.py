@@ -7,8 +7,8 @@
 
 # Modified by:
 # Rachel Kobayashi
-#   with 
 # Aaron Anderson
+#   with 
 # Eric Gan
 #
 # An alternative Part of Speech Tagger
@@ -28,15 +28,15 @@
 import os,sys,time
 
 #Set Python & directory paths
-os.chdir("../")
+#os.chdir("../")
 sys.setrecursionlimit(100000)
 sys.path.append(os.path.abspath(""))
-os.chdir("./pSCRDRtagger")
-    
-from SCRDRlearner.PosTaggingRDRTree import PosTaggingRDRTree
-from Utility.Utils import getWordTag, getRawTextFromFile, readDictionary
-from SCRDRlearner.Object import FWObject
-from InitialTagger.EnInitialTagger import EnInitTagger4Corpus, EnInitTagger4Sentence
+#os.chdir("./pSCRDRtagger")
+
+from RDR_POS.SCRDRlearner.PosTaggingRDRTree import PosTaggingRDRTree
+from RDR_POS.Utility.Utils import getWordTag, getRawTextFromFile, readDictionary
+from RDR_POS.SCRDRlearner.Object import FWObject
+from RDR_POS.InitialTagger.EnInitialTagger import EnInitTagger4Corpus, EnInitTagger4Sentence
 
 
 class EnRDRTree(PosTaggingRDRTree):

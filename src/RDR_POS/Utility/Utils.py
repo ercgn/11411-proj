@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from SCRDRlearner.Object import Object
+from RDR_POS.SCRDRlearner.Object import Object
 
 def isAbbre(word):
     word = unicode(word, "utf-8")
