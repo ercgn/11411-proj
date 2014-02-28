@@ -1,0 +1,28 @@
+	Copyright (C) 2013 by 
+	Dat Quoc Nguyen 
+		datquocnguyen@gmail.com	or datnq@vnu.edu.vn
+		VNU University of Engineering and Technology, Vietnam
+	Dai Quoc Nguyen 
+		dainq@vnu.edu.vn	
+		VNU University of Engineering and Technology, Vietnam
+	Dang Duc Pham	
+		pham@l3s.de 		
+		L3S Research Center, Germany
+	Son Bao Pham	
+		sonpb@vnu.edu.vn	
+		VNU University of Engineering and Technology, Vietnam
+	
+	RDRPOSTagger's website: http://rdrpostagger.sourceforge.net/
+	
+    RDRPOSTagger is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+
+    RDRPOSTagger is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/

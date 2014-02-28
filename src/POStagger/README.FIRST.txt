@@ -1,0 +1,1 @@
+IMPORTANT: The RDRPOSTagger supposes that there is no character " in training and test corpora. The users should replace entirely the character " in the corpora by another special character/string (for instance `` or '') before training and testing the tagger.

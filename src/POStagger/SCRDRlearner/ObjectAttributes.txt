@@ -1,0 +1,10 @@
+word
+tag
+prevWord2
+prevWord1
+nextWord1
+nextWord2
+prevTag2
+prevTag1
+nextTag1
+nextTag2

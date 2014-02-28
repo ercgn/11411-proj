@@ -1,0 +1,3 @@
+[WP, VBD, DT, NNP, NN]
+[WP, NN, VBD, DT, NN]
+[DT, NN, WP, VBD, DT, NN, VBD, NN]

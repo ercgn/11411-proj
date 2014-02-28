@@ -1,0 +1,14 @@
+word
+tag
+prevWord3
+prevWord2
+prevWord1
+nextWord1
+nextWord2
+nextWord3
+prevTag3
+prevTag2
+prevTag1
+nextTag1
+nextTag2
+nextTag3
