@@ -58,10 +58,6 @@ def parse_question(q_str):
     verbs = [x[0] for x in pos_list if is_verb(x[1])]
     nouns = [x[0] for x in pos_list if is_noun(x[1])]
 
-## combine words that are next to each other in the question 
-## (probably a phrase)
-#    nouns = combWords(nouns, q_tokens);
-##
     key_tokens = verbs + nouns
     
 #    if WH_PRONOUN in pos_dict:
@@ -80,23 +76,5 @@ def is_verb(tag):
 def is_noun(tag):
     return (tag[:1] == 'N')
 
-# Combines entries in 
-def combWords(words, question):
-    Q = len(question);
-    combined = [];
-    x = 0;
-    while x < len(words):
-        idx = question.index(words[x]);
-        phrase = "";
-        if idx < Q-1:
-            y = 0;
-            while x + y < len(words) and question[idx + y] == words[x + y]:
-#                print idx + y,x + y;
-                phrase += words[x + y] + " ";
-                y+=1;
-            combined.append(phrase.strip());
-            x += y;
-        else:
-            combined.append(words[x]);
-            x += 1;
-    return combined;
+# Combines entries when they appear next to each other in some source
+# moved to combine class;
