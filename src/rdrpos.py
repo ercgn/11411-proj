@@ -23,5 +23,5 @@ def pos_tag(text):
     r.constructTreeFromRulesFile('RDR_POS/Trained/EN.RDR')
     dictionary = readDictionary('RDR_POS/Trained/EN.DICT')
     tagList = r.tagRawCorpus(dictionary, text.strip())
-    
+    return tagList;
 

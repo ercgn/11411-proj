@@ -61,8 +61,6 @@ class EnRDRTree(PosTaggingRDRTree):
         outStr = "";
         outStr += self.tagRawSentence(DICT, inputStr) + "\n";
         outList = outStr.split();
-        #        print ""
-        print outList;
         return outList;
 
 ## wrapper functions to test  and run the file as a test.
