@@ -1,6 +1,7 @@
 import nltk
 import sys
 from parser import MyHTMLParser
+import nltk_helper
 
 def driver(articlefd, testfd):
     
@@ -13,8 +14,34 @@ def driver(articlefd, testfd):
         Parser.feed(buf)
         buf = articlefd.readline()
     
-    print "List of topics:"
-    print Parser.grabTopicList()
+    #print "List of topics:"
+    #print Parser.grabTopicList()
+    #
+    #print "Topic Dict"
+    #print Parser.grabTopicSentenceDict()
+    #
+    #print "Article List"
+    sList = Parser.grabTextSentenceList()
+    
+    #To be changed
+    keyWordList = ["academy", "award", "awards", "win", "won"]
+    keyWordList = ["hilary", "swank", "appear"]
+   
+    syn = nltk_helper.getSynonyms("win")
+    print syn
+
+    maxMatch = 0
+    bestSentence = ""
+    for sentence in sList:
+        keyWordCount = 0
+        for word in keyWordList:
+            if word in set(sentence.lower().split(" ")):
+                keyWordCount += 1
+        if keyWordCount > maxMatch:
+            maxMatch = keyWordCount
+            bestSentence = sentence
+    
+    print bestSentence
     
 
 if __name__ == '__main__':

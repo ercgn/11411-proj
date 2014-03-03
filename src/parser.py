@@ -1,8 +1,13 @@
 #TODO:
 #-Handle h3 tags (subtopics of topics)
 #-Remodel this parser to handle UNICODE instead of STRINGS (BIG BIG Difference)
+#-Replace double-quotations with double-single quotations
+#-Replace all whitespace characters (\n, \t etc) with spaces.
+#-Find a way to strip a word to its morphological roots.
 
 from HTMLParser import HTMLParser
+import nltk_helper
+import nltk.data
 
 class MyHTMLParser(HTMLParser):
     def __init__(self):
@@ -27,12 +32,15 @@ class MyHTMLParser(HTMLParser):
         # Then reset the buffer.
         if tag == "h2":
             if self.curTopic == None:
-                self.topicDict[self.articleName] = self.curTopicBuf
+                self.topicDict[self.articleName.strip()] = self.curTopicBuf
             elif self.curTopicBuf != "":
-                self.topicDict[self.curTopic] = self.curTopicBuf
+                self.topicDict[self.curTopic.strip()] = self.curTopicBuf
             self.curTopicBuf = ""
         
     def handle_endtag(self, tag):
+        if tag in self.tagsToRead:
+            self.articleText += " "
+            self.curTopicBuf += " "
         if self.tagList.pop() != tag:
             raise "Error! Tag mismatch! Aborting..."
     
@@ -49,11 +57,20 @@ class MyHTMLParser(HTMLParser):
     
     #Call this function to grab the article text.
     def grabText(self):
-        return self.articleText
+        return self.articleText.decode("utf-8")
+
+    def grabTextSentenceList(self):
+        return nltk_helper.parseTextToSentences(self.articleText)
     
     #Returns the dictionary mapping of topics to texts
     def grabTopicDict(self):
         return self.topicDict
+
+    def grabTopicSentenceDict(self):
+        sentDict = dict()
+        for key in self.topicDict:
+            sentDict[key] = nltk_helper.parseTextToSentences(self.topicDict[key])
+        return sentDict
     
     #Returns a list of topics (assumed to be h2-tagged) for the article
     def grabTopicList(self):
