@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from Utility.Utils import readDictionary
+from RDR_POS.Utility.Utils import readDictionary
 
 def EnInitTagger4Sentence(FREQDICT, sentence):
     """
