@@ -4,33 +4,34 @@
 import nltk.data, sys
 from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 from nltk.corpus import wordnet
+from nltk.stem import porter
 
 def parseFileToSentences(file_name):
-  punkt_param = PunktParameters()
-  punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
-  sentence_splitter = PunktSentenceTokenizer(punkt_param)
-  fp = open(file_name, "r")
-  data = fp.read()
-  data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
+    punkt_param = PunktParameters()
+    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+    sentence_splitter = PunktSentenceTokenizer(punkt_param)
+    fp = open(file_name, "r")
+    data = fp.read()
+    data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
 
-  sentences = []
-  for para in data.split('\n'):
-    if para:
-      sentences.extend(sentence_splitter.tokenize(para))
-  return sentences
+    sentences = []
+    for para in data.split('\n'):
+        if para:
+            sentences.extend(sentence_splitter.tokenize(para))
+    return sentences
 
 def parseTextToSentences(text):
-  punkt_param = PunktParameters()
-  punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
-  sentence_splitter = PunktSentenceTokenizer(punkt_param)
-  data = text
-  data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
+    punkt_param = PunktParameters()
+    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+    sentence_splitter = PunktSentenceTokenizer(punkt_param)
+    data = text
+    data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
 
-  sentences = []
-  for para in data.split('\n'):
-    if para:
-      sentences.extend(sentence_splitter.tokenize(para))
-  return sentences
+    sentences = []
+    for para in data.split('\n'):
+        if para:
+            sentences.extend(sentence_splitter.tokenize(para))
+    return sentences
 
 def getSynonyms(word):
     syns = wordnet.synsets(word)
@@ -43,3 +44,10 @@ def areSynonyms(word1, word2):
 
 def printSynonyms(word):
     print getSynonyms(word)
+
+def getStem(word):
+    stemmer = porter.PorterStemmer()
+    return stemmer.stem(word)
+
+def hasSameStem(word1, word2):
+    return getStem(word1) == getStem(word2)

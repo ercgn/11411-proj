@@ -25,10 +25,9 @@ def driver(articlefd, testfd):
     
     #To be changed
     keyWordList = ["academy", "award", "awards", "win", "won"]
-    keyWordList = ["hilary", "swank", "appear"]
    
-    syn = nltk_helper.getSynonyms("win")
-    print syn
+    word = "happiness"
+    print nltk_helper.getStem(word)
 
     maxMatch = 0
     bestSentence = ""
