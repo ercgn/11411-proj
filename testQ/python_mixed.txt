@@ -1,0 +1,6 @@
+How popular is python?
+When did python start?
+What is the main implementation of python?
+What software uses python?
+What languages have been influenced by python?
+
