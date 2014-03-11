@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
+import re, nltk
 from RDR_POS.Utility.Utils import readDictionary
 
 def EnInitTagger4Sentence(FREQDICT, sentence):
@@ -7,7 +7,10 @@ def EnInitTagger4Sentence(FREQDICT, sentence):
     Initial tagger for English sentence
     """
     
-    words = sentence.strip().split()
+#    words = sentence.strip().split()
+    # use nltk word splitting since punc not separated. 
+    # helps with consistency elsewhere
+    words = nltk.word_tokenize(sentence.strip());
     taggedSen = ''
     for word in words:
         lowerW = word.lower()

@@ -25,7 +25,7 @@
 # lexicon is the path to the dictionary: ../Trained/EN.DICT  (or EN.DICT)
 # and line is the given string to be analysized. 
 
-import os,sys,time
+import os,sys,time, nltk
 
 #Set Python & directory paths
 #os.chdir("../")

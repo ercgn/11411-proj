@@ -9,6 +9,8 @@
 
 import rdrpos
 
+from set_defs import Identity;
+
 class Combine:
     def __init__(self):
         self.ID = Identity();
@@ -65,12 +67,3 @@ class Combine:
         print combined;
         return;
 
-#uses python sets, maybe move or change structure
-class Identity():
-    def isMonth(self,word):
-        calendar = ['january','february','march','april','may','june',
-                  'july', 'august','september','october','november','december',
-                  'jan','feb','mar','apr','may', 'jun',
-                  'jul','aug','sep','sept','oct','nov','dec'];
-        months = set(calendar);
-        return word.lower() in months;
