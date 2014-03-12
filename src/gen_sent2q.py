@@ -14,6 +14,11 @@
 import rdrpos,nltk
 from combinations import Combine
 
+# "easy" cases to replace:
+#   dates -> when
+#   numbers -> how many [noun] [verb phrase]?
+#   names / proper nouns
+
 class ConstructQuestion:
 
     def formatQuestion(self, question):
