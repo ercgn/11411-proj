@@ -1,14 +1,19 @@
-#######
+#!/usr/bin/python
 #
-# combination.py
+# combinations.py
 #
-# utilities for combining related information:
+# class for combining related information:
 #   words: from subset, group words that appear together in some sample
-#   date:  group date information
-#######
+#   dates: given the location and length of dates, group, replace tag
+#
+# Rachel Kobayashi
+#   with
+# Aaron Anderson
+# Eric Gan
+#
+#
 
 import rdrpos
-
 from set_defs import Identity;
 
 class Combine:
@@ -40,30 +45,16 @@ class Combine:
                 x += 1;
         return combined;
 
-# return dates in a given phrase
-# TODO: clean up algorithm, simplify
-    def dates(self, phrase):
-        pos = rdrpos.pos_tag(phrase);
-        tokens = phrase.strip().split();
-        idx = -1;
-        numbers = [];
-        indicies = [];
-        for tag in pos:
-            if tag == "CD":
-                idx = pos.index(tag,idx+1);
-                numbers.append(tokens[idx]);
-                indicies.append(idx);
-        insertDict = {};
-        for idx,listIDX in enumerate(indicies):
-            if listIDX > 0:
-                word = tokens[listIDX-1];
-                if self.ID.isMonth(word):                    
-                    insertDict[idx] = word;
-        shift = 0;
-        for k,v in insertDict.items():
-            numbers.insert(k+shift, v);
-            shift += 1;
-        combined = self.words(numbers, tokens);
-        print combined;
-        return;
-
+    def dates(self, words, tags, location):
+        lengthAdj = 0;
+        date = [];
+        for place in location:
+            (startIdx, n) = place;
+            insertIdx = startIdx - lengthAdj;
+            for i in range(0,n):
+                date.append(words.pop(insertIdx));
+                tags.pop(insertIdx);
+            words.insert(insertIdx, " ".join(date));
+            tags.insert(insertIdx, "#DATE");
+            lengthAdj += (n-1);
+        return

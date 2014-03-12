@@ -1,6 +1,6 @@
 import os, sys
 
-from sent2q import ConstructQuestion
+from gen_sent2q import ConstructQuestion
 from combinations import Combine
 
 def parseSentences():

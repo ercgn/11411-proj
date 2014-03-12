@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# sent2q.py
+# gen_ sent2q.py
 #
 # Given a sentence, this file will turn in into a question. 
 #
@@ -13,6 +13,7 @@
 
 import rdrpos,nltk
 from combinations import Combine
+from qutil import *
 
 # "easy" cases to replace:
 #   dates -> when
@@ -31,32 +32,16 @@ class ConstructQuestion:
         return question;
 
     def make(self,sentence):
-        print "MAKE::",sentence;
+        c = Combine();
+        print "MAKE2::",sentence;
         s_tokens = nltk.word_tokenize(sentence.strip());
-        print s_tokens, len(s_tokens);
-        # currently assumes the punctuation is separated by a space
         POS = rdrpos.pos_tag(sentence.strip());
-        print POS, len(POS);
         question = "";
         changeIDX = False;
+        locations =  c.ID.findDates(s_tokens, POS);
+        c.dates(s_tokens, POS, locations);
+        print s_tokens;
+        print POS;
 #        question = self.formatQuestion(question);
         return question;
-"""
-        for idx in range(1, len(POS)):
-            prevTkn = POS[idx -1];
-            token = POS[idx];        
-            if prevTkn[:2] == "NN" and token[:1] == "V":
-#                print prevTkn;
-#                print s_tokens[idx-1], "\n";
-                changeIDX = idx-1;
-        for idx in range(0, len(s_tokens)):
-            if changeIDX and changeIDX == idx:
-                if idx == 0:
-                    question += "What ";
-                else: 
-                    question += "what ";
-            else:
-                question += s_tokens[idx] + " ";    
-        question = self.formatQuestion(question);
-        return question;
-"""
+
