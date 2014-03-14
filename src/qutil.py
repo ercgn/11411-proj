@@ -25,3 +25,11 @@ def q2str(queue, n):
             tags.append(tag);
     outStr = " ".join(tags);
     return outStr;
+
+# Checks if a POS tag refers to a verb
+def is_verb(tag):
+    return (tag[:1] == 'V')
+
+# Checks if a POS tag refers to a noun
+def is_noun(tag):
+    return (tag[:1] == 'N')

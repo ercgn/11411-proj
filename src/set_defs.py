@@ -28,7 +28,7 @@ days = set(['monday','tuesday','wednesday',
             'mon', 'tue','tues','wed','thur','thu','fri','sat','sun'
             'thursday','friday','saturday','sunday',]);
 timewords = set(['today','tomorrow','yesterday']);
-
+qWords = set(['who','what','where','when','why','did','do','does','is','was','how']);
 
 #uses python sets for speed. 
 class Identity():
@@ -41,6 +41,9 @@ class Identity():
 
     def isTimeWord(self, word):
         return word.lower() in timewords;
+
+    def isQuestionWord(self,word):
+        return word.lower() in qWords;
 
     # timewords: today, friday, yesterday, etc
     def isTemporal(self, word):
