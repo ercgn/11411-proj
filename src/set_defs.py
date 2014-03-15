@@ -30,6 +30,24 @@ days = set(['monday','tuesday','wednesday',
 timewords = set(['today','tomorrow','yesterday']);
 qWords = set(['who','what','where','when','why','did','do','does','is','was','how']);
 
+## REGULAR EXPRESSION STRINGS
+# (note there is an alernative way of savying the expression,
+# but that is mostly applied when used multiple times)
+# dates divided by foward slashes or dashes
+# accept both year/month/day and month/day/year
+# also year-month-day and month-day-year
+# with both the year as 2 or 4 digits;
+# does not check value of digits
+RE_DATE_FSLH1 = '\d{1,2}/\d{1,2}/(\d{4}|\d{2})$';
+RE_DATE_FSLH2 = '(\d{4}|\d{2})/\d{1,2}/\d{1,2}$'
+RE_DATE_DASH1 = '\d{1,2}-\d{1,2}-(\d{4}|\d{2})$'
+RE_DATE_DASH2 = '(\d{4}|\d{2})-\d{1,2}-\d{1,2}$'
+# tag sequence is number [anything] number
+RE_CD_EP_CD = 'CD (?P<mid>[^\s]{1,4}) CD'
+# tag sequence is [not_number] proper_noun number
+RE_X_NNP_CD = '[^C][^D] NNP CD'
+#  re.match(' NNP CD',newStr):
+
 #uses python sets for speed. 
 class Identity():
 
@@ -50,7 +68,21 @@ class Identity():
         words = days | timewords;
         return word.lower() in words;
 
+    # > 0 to check for days of the week
+    # < 0 to check for today, tommorrow, yesterday
+    # = 0 to check for both
+    def isTimeDep(self, wordList, ckCode):
+        for word in wordList:
+            if ckCode < 0 and self.isTimeWord(word):
+                return True;
+            elif ckCode > 0 and self.isDayOfWeeK(word):
+                return True;
+            elif ckCode == 0 and self.isTemporal(word):
+                return True;
+        return False;
+
     # return dates in a given phrase
+    # TODO pin down numerical constraints better
     def findDates(self, wordList, tagList):
         n = len(wordList);
         tagset = deque(["",""]);
@@ -61,7 +93,7 @@ class Identity():
             tag = tagList[idx];
             tagset.append(tag);
             newStr = q2str(tagset,3);
-            m = re.match('CD (?P<mid>[^\s]{1,4}) CD',newStr);
+            m = re.match(RE_CD_EP_CD,newStr);
             if m:
                 midTag = m.groupdict()['mid'];
                 if len(midTag) >=2 and midTag[0:2] == "NN":                    
@@ -71,30 +103,23 @@ class Identity():
                     if idx > 0 and self.isMonth(wordList[start-1]):
                         locations.append((start-1,4));
             # case for a month and day without year
-            elif re.match('[^C][^D] NNP CD',newStr) or \
-                 re.match(' NNP CD',newStr):
+            elif re.match(RE_X_NNP_CD,newStr) or \
+                 newStr == ' NNP CD':
                 if self.isMonth(wordList[start+1]):
                     locations.append((start+1, 2));
             elif tag == "CD":
                 word = wordList[idx];
-                # case for numeric date seprated by slashes
-                # accept both year/month/day and month/day/year
-                # also year-month-day and month-day-year
-                # with both the year as 2 or 4 digits;
-                # does not check value of digits
-                if re.match('\d{1,2}/\d{1,2}/(\d{4}|\d{2})$',word) or \
-                   re.match('(\d{4}|\d{2})/\d{1,2}/\d{1,2}$',word) or \
-                   re.match('\d{1,2}-\d{1,2}-(\d{4}|\d{2})$',word) or \
-                   re.match('(\d{4}|\d{2})-\d{1,2}-\d{1,2}$',word):
+                # case for numeric date seprated by slashes or dashes
+                if re.match(RE_DATE_FSLH1,word) or \
+                   re.match(RE_DATE_FSLH2,word) or \
+                   re.match(RE_DATE_DASH1,word) or \
+                   re.match(RE_DATE_DASH2,word):
                     locations.append((idx,1));
                 # case for year by itself
-                # TODO: pin down numeric constraints better. 
                 elif re.match('\d{4}$',word):
                     if idx < n-1 and not self.isMonth(wordList[idx+1]):    
-                        if word < 3000:
-                            print "SUCCESS";
+                        if int(word) > 0 and int(word) < 2100:
                             locations.append((idx,1));
             tagset.popleft();
-        print locations
         return locations;
 

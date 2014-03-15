@@ -20,9 +20,9 @@ class Combine:
     def __init__(self):
         self.ID = Identity();
 
-# combines words in the list "words" 
-#if they appear next to each other in the given string "question"
-# probably  not super efficient right now
+    # combines words in the list "words" 
+    #if they appear next to each other in the given string "question"
+    # probably  not super efficient right now
     def words(self,words, question):
         Q = len(question);
         combined = [];
@@ -45,10 +45,37 @@ class Combine:
                 x += 1;
         return combined;
 
-    def dates(self, words, tags, location):
+    # wrapper function to the regular join function 
+    # meant for sentences (wordList joined by spaces)
+    # combines commas in a natural method. 
+    # combines 's and . as well 
+    def sentJoin(self,wordList):
+        rmList = [];
+        for i,word in enumerate(wordList):
+            if i > 0: 
+                if word == "," or word[0] == "'" or word == ".":
+                    prev = wordList[i-1];
+                    prev += word;
+                    wordList[i-1] = prev;
+                    rmList.append(i);
+        offset = 0;
+        for index in rmList:
+            wordList.pop(index-offset); 
+            offset += 1;
+        sentence = " ".join(wordList);
+        return sentence;
+
+    # dates combines dates into a single entity 
+    # both in the "words" token list
+    # and in the tags list, with the tag "#DATE"
+    # dateLoc is a list of tuples (i,n)
+    #   where i is the start index of the date
+    #   and n is the length (in tokens) of the date
+    def dates(self, words, tags):
+        dateLoc = self.ID.findDates(words,tags);
         lengthAdj = 0;
         date = [];
-        for place in location:
+        for place in dateLoc:
             (startIdx, n) = place;
             insertIdx = startIdx - lengthAdj;
             for i in range(0,n):

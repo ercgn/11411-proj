@@ -1,3 +1,12 @@
+#
+# gen_makeQuestions.py
+#
+# module to test the question creation parser. 
+#
+
+
+
+
 import os, sys
 
 from gen_sent2q import ConstructQuestion
@@ -16,8 +25,7 @@ def parseSentences():
     for line in inFH:
         if line != "\n":
             outQ = questions.make(line);
-        #    c.dates(line);
-            print outQ;
+            print line, outQ, "\n";
     inFH.close();
     return;
 
