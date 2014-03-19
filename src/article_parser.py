@@ -25,7 +25,6 @@ from HTMLParser import HTMLParser
 import nltk_helper
 import nltk.data
 
-
 class MyHTMLParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)

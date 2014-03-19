@@ -23,8 +23,9 @@
 
 
 import nltk, rdrpos
-from qutil import *;
-from set_defs import Identity;
+from qutil import *
+from set_defs import Identity
+import nltk_helper as nhelp
 
 # Module Constants
 # hidden if we only immport the class from this module?
@@ -48,26 +49,34 @@ WH_ADVERB='WRB'     # Tag for wh-adverbs such as where, when
 #   does this add unnessary overhaed?
 #   does this actually make things simpler? 
 
-class QParser:
+class QParser(object):
     def __init__(self, question):
-        self.qstr = question;
-        self.qtok = nltk.word_tokenize(question);
-        self.qpos = rdrpos.pos_tag(question);
-        self.qset = zip(self.qtok, self.qpos);
+        # E: Let's create a list of generic verbs that we don't want to include
+        # This can be expanded.
+
+        self.ignoredWords = set(["did", "does", "do", "is", "was", "many"])
+
+        self.qstr = question
+        self.qtok = nltk.word_tokenize(question)
+        self.qpos = rdrpos.pos_tag(question)
+        self.qset = zip(self.qtok, self.qpos)
 
     def print_question(self):
-        print "\n", self.qstr;
-        print self.qtok;
-        print self.qpos, "\n";
+        print "\n", self.qstr
+        print self.qtok
+        print self.qpos, "\n"
 
     def asking_what(self):
-        idSets = Identity();
-        qwords = [];
-        for idx, tok in enumerate(qtok):
+        idSets = Identity()
+        qwords = []
+        for idx, tok in enumerate(self.qtok):
             if idSets.isQuestionWord(tok):
-                qwords += (tok,idx);
-        self.qust = qwords;
-        return qwords;
+                qwords += (tok,idx)
+        self.qust = qwords
+        return qwords
+
+    def get_tokens(self):
+        return self.qtok
 
     def find_keywords(self):
 
@@ -91,15 +100,40 @@ class QParser:
         # Extract relevant parts (key tokens) of the question
         # For now, return all nouns and verbs
         # R: for now, this seems pretty suficient in terms of nouns
-        #    the verbs are a bit shakey though, leaving ambiguity
-        verbs = [x[0] for x in pos_list if is_verb(x[1])]
-        nouns = [x[0] for x in pos_list if is_noun(x[1])]
-        
+        #    the verbs are a bit shakey though, leaving ambiguityA
 
-        key_tokens = verbs + nouns
-        self.verbs = verbs;
-        self.nouns = nouns;
-        self.keyTok = key_tokens;
+        verbs = [x for x in pos_list if is_verb(x[1])]
+        nouns = [x for x in pos_list if is_noun(x[1])]
+        adjs = [x for x in pos_list if is_adj(x[1])]
+        nums = [x for x in pos_list if is_num(x[1])]
+
+        #Add synonyms: only to verbs (maybe adjectives?)
+        allSynonyms = []
+        for tup in verbs:
+            allSynonyms += map(
+                lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
+
+        # for word in adjs:
+        #     allSynonyms += nhelp.getSynonyms(word)
+
+        key_tokens = verbs + nouns + adjs + nums + allSynonyms
+
+        # Simple but slow duplicate-remover. 
+        key_tokens = list(set(key_tokens))
+
+        # Remove insignificant words
+        toRemove = []
+        for word in self.ignoredWords:
+            for tup in key_tokens:
+                if word == tup[0]: 
+                    toRemove.append(tup)
+        for tup in toRemove:
+            key_tokens.remove(tup)
+
+        self.verbs = verbs
+        self.nouns = nouns
+        self.adjs = adjs
+        self.keyTok = key_tokens
 
 #    if WH_PRONOUN in pos_dict:
 #        # get the word following the wh-pronoun
@@ -108,3 +142,12 @@ class QParser:
 #        key_tokens += [ref_noun]
     
         return key_tokens
+
+# For testing. Will not run unless we directly call 
+# python ans_q_parser.py
+if __name__ == '__main__':
+    qInfo = QParser("What things did Aaron break today?")
+    key_tokens = qInfo.find_keywords()
+    test = qInfo.asking_what()
+    print key_tokens
+    print test

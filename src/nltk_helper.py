@@ -1,7 +1,20 @@
+#!/usr/bin/python
+# 
+# nltk_helper.py
+# 
+# General helper util functions
+# 
+# Eric Gan
+#   with 
+# Aaron Anderson
+# Rachel Kobayashi
+# 
+# Note: 
 # Some code was borrowed since the naive nltk tokenizer wasn't perfect.
 # http://stackoverflow.com/questions/14095971/how-to-tweak-the-nltk-sentence-tokenizer
 
-import nltk.data, sys
+import nltk, rdrpos
+import nltk.data
 from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 from nltk.corpus import wordnet
 from nltk.stem import porter
@@ -45,9 +58,18 @@ def areSynonyms(word1, word2):
 def printSynonyms(word):
     print getSynonyms(word)
 
+# Stemmer based on Porter Stemmer.
 def getStem(word):
     stemmer = porter.PorterStemmer()
     return stemmer.stem(word)
 
 def hasSameStem(word1, word2):
     return getStem(word1) == getStem(word2)
+
+# Splits sentence to clauses separated by commas. 
+def splitSentence(sentence):
+    #POS tags that will determine whether 
+    
+    stok = nltk.word_tokenize(sentence)
+    spos = rdrpos.pos_tag(sentence)
+    
