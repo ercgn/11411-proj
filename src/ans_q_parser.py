@@ -107,18 +107,32 @@ class QParser(object):
         adjs = [x for x in pos_list if is_adj(x[1])]
         nums = [x for x in pos_list if is_num(x[1])]
 
+
+
+        # Remove insignificant verbs
+        toRemove = []
+        for word in self.ignoredWords:
+            for tup in verbs:
+                if word == tup[0]: 
+                    toRemove.append(tup)
+        for tup in toRemove:
+            verbs.remove(tup)
+
         #Add synonyms: only to verbs (maybe adjectives?)
         allSynonyms = []
         for tup in verbs:
             allSynonyms += map(
                 lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
 
-        # for word in adjs:
-        #     allSynonyms += nhelp.getSynonyms(word)
+        #Add synonyms: to adjs too!
+        for tup in adjs:
+            allSynonyms += map(
+                lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
 
-        key_tokens = verbs + nouns + adjs + nums + allSynonyms
 
         # Simple but slow duplicate-remover. 
+
+        key_tokens = verbs + nouns + adjs + nums + allSynonyms
         key_tokens = list(set(key_tokens))
 
         # Remove insignificant words

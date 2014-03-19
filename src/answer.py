@@ -17,7 +17,7 @@ import nltk_helper as nhelp
 from article_parser import MyHTMLParser
 from ans_q_parser import QParser
 
-DEBUG = False
+DEBUG = 0
 
 #HEURISTIC:
 # The purpose of the heuristic is to put a weight to certain key words based
@@ -152,13 +152,16 @@ class Answer(object):
 
             #TODO: Write synonym generator here (or put them in ans_q_parser?)
 
+            # modify keyword List
+            if DEBUG: print "Key Words (before): ", keyWordList, "\n" 
+
             #if we care about capitalization, comment this line
             keyWordList = map(str.lower, keyWordList)
 
             #if we don't want to stem key words, comment this line.
             keyWordList = list(set(map(nhelp.getStem, keyWordList)))
 
-            if DEBUG: print "Key Words: ", keyWordList, "\n" 
+            if DEBUG: print "Key Words (after): ", keyWordList, "\n" 
 
             if "How many" in curQ or "how many" in curQ:
                 self.qType = "How many"
