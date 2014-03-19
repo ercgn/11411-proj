@@ -2,7 +2,7 @@
 from Node import Node
 from Object import FWObject
 from RDRTree import RDRTree
-from RDR_POS.Utility.Utils import getObjectDictionary, getObject, getWordTag
+from util.RDR_POS.Utility.Utils import getObjectDictionary, getObject, getWordTag
 
 #"""
 #Creating rules corresponding with each object of 7-word window

@@ -1,6 +1,6 @@
 # testing the qa algorthm 
 
-from ans_q_parser import QParser;
+from util.q_parser import QParser;
 import sys;
 
 # key_tokens = qx_parse.parse_question("What things did Aaron break today?")

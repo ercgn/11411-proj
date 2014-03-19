@@ -22,10 +22,11 @@
 #
 
 
-import nltk, rdrpos
-from qutil import *
-from set_defs import Identity
-import nltk_helper as nhelp
+import nltk
+import util.rdrpos as rdrpos
+from util.qutil import *
+from util.set_defs import Identity
+import util.nltk_helper as nhelp
 
 # Module Constants
 # hidden if we only immport the class from this module?

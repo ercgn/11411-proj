@@ -33,10 +33,10 @@ sys.setrecursionlimit(100000)
 sys.path.append(os.path.abspath(""))
 #os.chdir("./pSCRDRtagger")
 
-from RDR_POS.SCRDRlearner.PosTaggingRDRTree import PosTaggingRDRTree
-from RDR_POS.Utility.Utils import getWordTag, getRawTextFromFile, readDictionary
-from RDR_POS.SCRDRlearner.Object import FWObject
-from RDR_POS.InitialTagger.EnInitialTagger import EnInitTagger4Corpus, EnInitTagger4Sentence
+from util.RDR_POS.SCRDRlearner.PosTaggingRDRTree import PosTaggingRDRTree
+from util.RDR_POS.Utility.Utils import getWordTag, getRawTextFromFile, readDictionary
+from util.RDR_POS.SCRDRlearner.Object import FWObject
+from util.RDR_POS.InitialTagger.EnInitialTagger import EnInitTagger4Corpus, EnInitTagger4Sentence
 
 
 class EnRDRTree(PosTaggingRDRTree):

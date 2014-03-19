@@ -11,11 +11,12 @@
 #
 #
 
-import nltk, rdrpos
+import nltk
+import util.rdrpos
 import random, sys
-import nltk_helper as nhelp
-from article_parser import MyHTMLParser
-from ans_q_parser import QParser
+import util.nltk_helper as nhelp
+from util.article_parser import MyHTMLParser
+from answer.q_parser import QParser
 
 DEBUG = 0
 

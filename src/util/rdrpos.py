@@ -14,14 +14,14 @@
 #
 #
 
-from RDR_POS.pSCRDRtagger.EnPOS import EnRDRTree
-from RDR_POS.Utility.Utils import readDictionary
+from util.RDR_POS.pSCRDRtagger.EnPOS import EnRDRTree
+from util.RDR_POS.Utility.Utils import readDictionary
 import os
 
 def pos_tag(text):
     r = EnRDRTree()
-    r.constructTreeFromRulesFile('RDR_POS/Trained/EN.RDR')
-    dictionary = readDictionary('RDR_POS/Trained/EN.DICT')
+    r.constructTreeFromRulesFile('util/RDR_POS/Trained/EN.RDR')
+    dictionary = readDictionary('util/RDR_POS/Trained/EN.DICT')
     tagList = r.tagRawCorpus(dictionary, text.strip())
     return tagList;
 

@@ -1,4 +1,4 @@
-OBJECT_ATTS = "RDR_POS/SCRDRlearner/ObjectAttributes.txt"
+OBJECT_ATTS = "util/RDR_POS/SCRDRlearner/ObjectAttributes.txt"
 
 class Object:
     """

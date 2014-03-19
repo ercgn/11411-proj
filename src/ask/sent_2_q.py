@@ -11,9 +11,10 @@
 #
 #
 
-import rdrpos,nltk
-from combinations import Combine
-from qutil import *
+import util.rdrpos as rdrpos
+import nltk
+from util.combinations import Combine
+from util.qutil import *
 
 # "easy" cases to replace:
 #   dates -> when

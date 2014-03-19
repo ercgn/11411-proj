@@ -9,8 +9,8 @@
 
 import os, sys
 
-from gen_sent2q import ConstructQuestion
-from combinations import Combine
+from sent2q import ConstructQuestion
+from util.combinations import Combine
 
 def parseSentences():
     questions = ConstructQuestion()
