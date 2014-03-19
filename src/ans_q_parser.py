@@ -120,14 +120,14 @@ class QParser(object):
 
         #Add synonyms: only to verbs (maybe adjectives?)
         allSynonyms = []
-        for tup in verbs:
-            allSynonyms += map(
-                lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
+        # for tup in verbs:
+        #     allSynonyms += map(
+        #         lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
 
-        #Add synonyms: to adjs too!
-        for tup in adjs:
-            allSynonyms += map(
-                lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
+        # #Add synonyms: to adjs too!
+        # for tup in adjs:
+        #     allSynonyms += map(
+        #         lambda x: (x, tup[1]), nhelp.getSynonyms(tup[0]))
 
 
         # Simple but slow duplicate-remover. 
@@ -139,7 +139,7 @@ class QParser(object):
         toRemove = []
         for word in self.ignoredWords:
             for tup in key_tokens:
-                if word == tup[0]: 
+                if word.lower() == tup[0].lower(): 
                     toRemove.append(tup)
         for tup in toRemove:
             key_tokens.remove(tup)
