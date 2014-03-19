@@ -62,24 +62,24 @@ class ConstructQuestion:
     def make(self,sentence):
         combi = self.c
 
-        s_tokens = nltk.word_tokenize(sentence.strip());
+        toks = nltk.word_tokenize(sentence.strip());
         POS = rdrpos.pos_tag(sentence.strip());
-        N = len(s_tokens);
+        N = len(toks);
 
-        # find date locations and replace them in the given, s_tokens, POS
-        combi.dates(s_tokens, POS);
+        # find date locations and replace them in the given, toks, POS
+        combi.dates(toks, POS);
 
         # check for context based on timing (might require change of verb)
-        timeFlag = combi.ID.isTimeDep(s_tokens,0);
+        timeFlag = combi.ID.isTimeDep(toks,0);
         print timeFlag;
 
-#        print s_tokens;
+#        print toks;
 #        print POS;
-        question = self.qFromDate(s_tokens,POS,N);
+        question = self.qFromDate(toks,POS,N);
         if question != "":
             question = self.formatQuestion(question);        
             return question;
-        question = self.qFromNoun(s_tokens,POS);
+        question = self.qFromNoun(toks,POS);
         if question != "":
             question = self.formatQuestion(question);
             return question;
