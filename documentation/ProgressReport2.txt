@@ -1,0 +1,16 @@
+Intro
+Hi, we are Error 501: Not Yet Implemented and this is our second progress report on our project for Natural Language Processing, Spring 2014!  We're going to talk about where we are currently with the project, and where we are planning on going next with each part.
+
+Where we are
+  - Question Answering
+    > Based on key words from the question we receive (nouns, or specific verbs) we search the article for sentences which contain several of the key words.  If the question given to us is a yes or no question, we use the sentence to make a true or false judgement and output a corresponding response.  Otherwise, we are currently returning the entire sentence, which often contains the answer.
+  - Question Generating
+    > We have structure for taking in a sentence, removing dates or key nouns, and replacing them with question words.  Currently, we do not re-arrange the words of the sentence; so a sentence like "David Beckham was born on May 2, 1975" would become the question "David Beckham was born on what date?"  We also can take a sentence and replace the first noun with the word "What" as a quick way to turn a sentence into a question.  This is still quite rudimentary; we are planning to make it more robust in the future.  However, it works well on basic sentences which follow the pattern of noun - verb - object.
+
+Where we're going
+  - Question Answering
+    > 
+  - Question Generating
+    > We are planning to select a random sentence from the article and use the framework we are currently developing to turn that sentence into a question.  We will also generate a quality score for the question based on its grammaticality (possibly implemented by parse trees), and select only those questions which have a sufficiently high quality.
+
+
