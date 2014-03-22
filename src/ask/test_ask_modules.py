@@ -9,12 +9,11 @@
 
 import os, sys
 
-from sent2q import ConstructQuestion
+from sent_2_q import ConstructQuestion
 from util.combinations import Combine
 
 def parseSentences():
     questions = ConstructQuestion()
-    c = Combine();
     args = sys.argv[1:];
     argc = len(args);
     if argc < 1:

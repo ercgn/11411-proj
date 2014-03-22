@@ -21,7 +21,7 @@ from util.qutil import *
 #   numbers -> how many [noun] [verb phrase]?
 #   names / proper nouns
 
-class ConstructQuestion:
+class ConstructQuestion(object):
     def __init__(self):
         self.c = Combine();
 
@@ -52,11 +52,21 @@ class ConstructQuestion:
         else:
             return "";
 
-    # creates a question by replacing the first noun with "what"
+    # creates a question by replacing the first noun or pronoun 
+    # that preceeds a verb with "what or who" as appropriate"
     def qFromNoun(self,tok,POS):
-        for i,tag in enumerate(POS):
-            if is_noun(tag):
-                tok[i] = "what";
+        for i,tag in enumerate(POS[0:-1]):
+            nextTag = POS[i+1];
+            if is_verb(nextTag):    
+#                print "verb: ",tok[i+1];
+                if is_noun(tag):
+                    if len(tag) > 2 and tag[0:3] == "NNP":
+                        tok[i] = "who";
+                    else:
+                        print "Else"
+                        tok[i] = "what";
+                if tag == "PRP":
+                    tok[i] = "who";
                 return self.c.sentJoin(tok);
         return "";
 
@@ -69,13 +79,12 @@ class ConstructQuestion:
 
         # find date locations and replace them in the given, toks, POS
         combi.dates(toks, POS);
-
+        combi.names(toks, POS);
+        print "TOKS: ",toks;
+        print "POS:: ",POS;
         # check for context based on timing (might require change of verb)
         timeFlag = combi.ID.isTimeDep(toks,0);
-        print timeFlag;
 
-#        print toks;
-#        print POS;
         question = self.qFromDate(toks,POS,N);
         if question != "":
             question = self.formatQuestion(question);        

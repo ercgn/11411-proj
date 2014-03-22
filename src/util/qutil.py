@@ -17,6 +17,10 @@
 from collections import deque;
 from copy import deepcopy;
 
+
+# constants
+#DATE_TAG = "#DATE";
+
 # outputs the first n items in queue into a string;
 def q2str(queue, n):
     copyQ = deepcopy(queue);
