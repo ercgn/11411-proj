@@ -21,7 +21,7 @@ from util.qutil import *
 #   numbers -> how many [noun] [verb phrase]?
 #   names / proper nouns
 
-class ConstructQuestion:
+class ConstructQuestion(object):
     def __init__(self):
         self.c = Combine();
 

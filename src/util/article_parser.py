@@ -23,6 +23,7 @@
 
 from HTMLParser import HTMLParser
 import nltk_helper
+import nltk
 import nltk.data
 
 class MyHTMLParser(HTMLParser):
@@ -77,6 +78,9 @@ class MyHTMLParser(HTMLParser):
 
     def grabTextSentenceList(self):
         return nltk_helper.parseTextToSentences(self.articleText)
+
+    def grabTokList(self):
+        return nltk.word_tokenize(self.grabText())
     
     #Returns the dictionary mapping of topics to texts
     def grabTopicDict(self):

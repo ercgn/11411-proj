@@ -21,7 +21,7 @@ from nltk.stem import porter
 
 def parseFileToSentences(file_name):
     punkt_param = PunktParameters()
-    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'ms', 'mrs', 'prof', 'inc'])
     sentence_splitter = PunktSentenceTokenizer(punkt_param)
     fp = open(file_name, "r")
     data = fp.read()
@@ -35,7 +35,7 @@ def parseFileToSentences(file_name):
 
 def parseTextToSentences(text):
     punkt_param = PunktParameters()
-    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+    punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'ms', 'mrs', 'prof', 'inc'])
     sentence_splitter = PunktSentenceTokenizer(punkt_param)
     data = text
     data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')

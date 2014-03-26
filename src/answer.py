@@ -47,9 +47,9 @@ class Answer(object):
 
         self.yesList = ["Yes.", "Absolutely!", "Positive!", "Yes sir.", 
                         "Of course!", "Uh-huh.", "Definitely.", "Affirmative.", 
-                        "Obviously. You think it's raining nyan cats?"]
+                        "Most definitely, yo!"]
         self.noList = ["No.", "Negative.", "Absolutely not!", "No sir.", 
-                        "Of course not!", "Nope.", "Not at all."]
+                        "Of course not!", "Nope.", "Not at all.", "Naw, yo!"]
 
         self.qType = None
 

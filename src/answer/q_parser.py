@@ -108,8 +108,6 @@ class QParser(object):
         adjs = [x for x in pos_list if is_adj(x[1])]
         nums = [x for x in pos_list if is_num(x[1])]
 
-
-
         # Remove insignificant verbs
         toRemove = []
         for word in self.ignoredWords:
