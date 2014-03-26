@@ -13,7 +13,6 @@ from sent_2_q import ConstructQuestion
 from util.combinations import Combine
 
 def parseSentences():
-    questions = ConstructQuestion()
     args = sys.argv[1:];
     argc = len(args);
     if argc < 1:
@@ -23,7 +22,8 @@ def parseSentences():
     inFH = open(inputFile);
     for line in inFH:
         if line != "\n":
-            outQ = questions.make(line);
+            questions = ConstructQuestion(line);
+            outQ = questions.out;
             print line, outQ, "\n";
     inFH.close();
     return;

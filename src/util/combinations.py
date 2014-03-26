@@ -56,7 +56,7 @@ class Combine(object):
         rmList = [];
         for i,word in enumerate(wordList):
             if i > 0: 
-                if word == "," or word[0] == "'" or word == ".":
+                if word == "," or word[0] == "'" or word == "." or word == '?':
                     prev = wordList[i-1];
                     prev += word;
                     wordList[i-1] = prev;
@@ -98,9 +98,9 @@ class Combine(object):
         dateLoc = self.ID.findDates(words,tags);
         self.words = words;
         self.tags = tags;
-        success = self.joinWordTag(dateLoc, DATE_TAG);
-        words = self.words;
-        tags = self.tags;
+        
+        self.joinWordTag(dateLoc, DATE_TAG);
+        
         self.words = None;
         self.tags = None;
         return;
@@ -109,9 +109,9 @@ class Combine(object):
         nameLoc = self.ID.findNmPrefix(words, tags);
         self.words = words;
         self.tags = tags;
-        success = self.joinWordTag(nameLoc,"NNP_PER");
-        words = self.words;
-        tags = self.tags;
+        
+        self.joinWordTag(nameLoc,"NNP_PER");
+        
         self.words = None;
         self.tags = None;
         return;

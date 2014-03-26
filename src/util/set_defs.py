@@ -31,6 +31,7 @@ timewords = set(['today','tomorrow','yesterday']);
 qWords = set(['who','what','where','when','why','did','do','does','is','was','how']);
 namePre = set(['mr.', 'mrs.', 'ms.', 'dr.', 'miss']);
 linkVerb = set(['is', 'am', 'are','was']);
+endPhrasePunc = set(['!', ',','.',';','?']);
 
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
@@ -52,6 +53,9 @@ RE_X_NNP_CD = '([^C][^D]+) NNP CD'
 
 #uses python sets for speed. 
 class Identity(object):
+
+    def isEndPhrasePunc(self,word):
+        return word.lower() in endPhrasePunc;
 
     def isMonth(self,word):
         return word.lower() in months;

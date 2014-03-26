@@ -16,7 +16,7 @@
 
 from collections import deque;
 from copy import deepcopy;
-
+import util.rdrpos as rdrpos;
 
 # constants
 #DATE_TAG = "#DATE";
@@ -45,3 +45,10 @@ def is_adj(tag):
 
 def is_num(tag):
     return (tag[:2] == "CD")
+
+def wordToLower(word):
+    tagU = rdrpos.pos_tag(word);
+    tagl = rdrpos.pos_tag(word.lower());
+    if tagU == tagl:
+        return word.lower();
+    return word;
