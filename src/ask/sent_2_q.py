@@ -102,6 +102,7 @@ class ConstructQuestion(object):
         # with the question word 
         # PROS: simplifies question, easier to make grammatical
         # CONS: ambiguity, possible erradication of important points
+        #### currently everything is reattached later
         (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
         if pSel != -1:
             tok = phraseTok[pSel];
@@ -127,6 +128,11 @@ class ConstructQuestion(object):
         # case: question word already in front, 
         #   only need to change punctuation
         else: qTok = tok;
+        # add other details back into the question
+        for i, phrase in enumerate(phraseTok):
+            if pSel != -1 and i != pSel:
+                print phrase;
+                qTok += phrase[0:-1];
         qTok += ['?'];
         question  =  self.c.sentJoin(qTok);        
         # capitalize first letter
@@ -142,7 +148,9 @@ class ConstructQuestion(object):
         origN = self.N
         if "#DATE" in set(pos):
             idx = pos.index("#DATE");
-            if idx < len(tok)-1 and pos[idx+1] == "IN":
+            if len(tok[idx]) == 4:
+                tok[idx] = "what year";
+            elif idx < len(tok)-1 and pos[idx+1] == "IN":
                 tok[idx] = "when";
             elif idx > 0 and is_verb(pos[idx-1]):
                     tok[idx] = "what";
