@@ -15,8 +15,11 @@
 
 import rdrpos
 from set_defs import Identity;
+#import util.qutil
 
-class Combine:
+DATE_TAG = "#DATE";
+
+class Combine(object):
     def __init__(self):
         self.ID = Identity();
 
@@ -53,7 +56,7 @@ class Combine:
         rmList = [];
         for i,word in enumerate(wordList):
             if i > 0: 
-                if word == "," or word[0] == "'" or word == ".":
+                if word == "," or word[0] == "'" or word == "." or word == '?':
                     prev = wordList[i-1];
                     prev += word;
                     wordList[i-1] = prev;
@@ -65,6 +68,26 @@ class Combine:
         sentence = " ".join(wordList);
         return sentence;
 
+    def joinWordTag(self, locations, replaceStr):
+        if self.words == None or self.tags == None:
+            return 0;
+        else:
+            save = [];
+            lengthAdj = 0;
+            toks = self.words;
+            pos = self.tags;
+            for place in locations:
+                (startIdx, n) = place;
+                insertIdx = startIdx - lengthAdj;
+                for i in range(0,n):
+                    save.append(toks.pop(insertIdx));
+                    pos.pop(insertIdx);
+                toks.insert(insertIdx, " ".join(save));
+                save = [];
+                pos.insert(insertIdx, replaceStr);
+                lengthAdj += (n-1);
+        return 1;
+
     # dates combines dates into a single entity 
     # both in the "words" token list
     # and in the tags list, with the tag "#DATE"
@@ -73,15 +96,22 @@ class Combine:
     #   and n is the length (in tokens) of the date
     def dates(self, words, tags):
         dateLoc = self.ID.findDates(words,tags);
-        lengthAdj = 0;
-        date = [];
-        for place in dateLoc:
-            (startIdx, n) = place;
-            insertIdx = startIdx - lengthAdj;
-            for i in range(0,n):
-                date.append(words.pop(insertIdx));
-                tags.pop(insertIdx);
-            words.insert(insertIdx, " ".join(date));
-            tags.insert(insertIdx, "#DATE");
-            lengthAdj += (n-1);
-        return
+        self.words = words;
+        self.tags = tags;
+        
+        self.joinWordTag(dateLoc, DATE_TAG);
+        
+        self.words = None;
+        self.tags = None;
+        return;
+
+    def names(self, words, tags):
+        nameLoc = self.ID.findNmPrefix(words, tags);
+        self.words = words;
+        self.tags = tags;
+        
+        self.joinWordTag(nameLoc,"NNP_PER");
+        
+        self.words = None;
+        self.tags = None;
+        return;

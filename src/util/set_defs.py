@@ -29,6 +29,9 @@ days = set(['monday','tuesday','wednesday',
             'thursday','friday','saturday','sunday',]);
 timewords = set(['today','tomorrow','yesterday']);
 qWords = set(['who','what','where','when','why','did','do','does','is','was','how']);
+namePre = set(['mr.', 'mrs.', 'ms.', 'dr.', 'miss']);
+linkVerb = set(['is', 'am', 'are','was']);
+endPhrasePunc = set(['!', ',','.',';','?']);
 
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
@@ -45,11 +48,14 @@ RE_DATE_DASH2 = '(\d{4}|\d{2})-\d{1,2}-\d{1,2}$'
 # tag sequence is number [anything] number
 RE_CD_EP_CD = 'CD (?P<mid>[^\s]{1,4}) CD'
 # tag sequence is [not_number] proper_noun number
-RE_X_NNP_CD = '[^C][^D] NNP CD'
+RE_X_NNP_CD = '([^C][^D]+) NNP CD'
 #  re.match(' NNP CD',newStr):
 
 #uses python sets for speed. 
-class Identity():
+class Identity(object):
+
+    def isEndPhrasePunc(self,word):
+        return word.lower() in endPhrasePunc;
 
     def isMonth(self,word):
         return word.lower() in months;
@@ -62,6 +68,12 @@ class Identity():
 
     def isQuestionWord(self,word):
         return word.lower() in qWords;
+
+    def isNamePre(self, word):
+        return word.lower() in namePre;
+
+    def isLinkVerb(self,word):
+        return word.lower() in linkVerb;
 
     # timewords: today, friday, yesterday, etc
     def isTemporal(self, word):
@@ -103,6 +115,7 @@ class Identity():
                     if idx > 0 and self.isMonth(wordList[start-1]):
                         locations.append((start-1,4));
             # case for a month and day without year
+            # contains errors with regular expression
             elif re.match(RE_X_NNP_CD,newStr) or \
                  newStr == ' NNP CD':
                 if self.isMonth(wordList[start+1]):
@@ -123,3 +136,16 @@ class Identity():
             tagset.popleft();
         return locations;
 
+    def findNmPrefix(self, wordList, tagList):
+        prevTag = tagList[0];
+        locations = [];
+        for idx in range(1, len(tagList)):
+            tag = tagList[idx];
+            if prevTag == "NNP" and tag == "NNP":
+                if self.isNamePre(wordList[idx-1]):
+                    if idx < len(tagList) and tagList[idx+1] == "NNP":
+                        locations.append((idx-1, 3));
+                    else:
+                        locations.append((idx-1, 2));
+            prevTag = tag;
+        return locations;

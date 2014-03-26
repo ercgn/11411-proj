@@ -22,67 +22,182 @@ from util.qutil import *
 #   names / proper nouns
 
 class ConstructQuestion(object):
-    def __init__(self):
+    def __init__(self, sentence):
         self.c = Combine();
+        self.tokens = nltk.word_tokenize(sentence.strip());
+        self.tags = rdrpos.pos_tag(sentence.strip());
+        self.out = "";
+        self.N = len(self.tokens);
+        self.make(sentence);
 
-    # TODO: change order so the question flows more naturally
-    def formatQuestion(self, question):
-        question = question.strip();
-        # remove trailing period
-        puncTag = rdrpos.pos_tag(question[-1]);
-        if puncTag[0] == '.':
-            question = question[0:len(question)-1];
-        question += "?";
-        return question;
+    # Split the tokens and tags into phrases based on commas
+    # or other ending punc such as ;.?
+    # cannot just join and use split because the question word that has
+    # been replaced might be more than one word
+    # might be irrelevant depending on the sentence handed in
+    # hence the early check for , 
+    def splitComma(self):
+        tok = self.tokens;
+        pos = self.tags;
+        if ',' not in set(tok):
+            return tok,pos, (-1,0);
+        saveTag = [];
+        saveTok = [];
+        newTok = [];
+        newTag = [];
+        idxs = [];
+        idxs.append(0);
+        for i,word in enumerate(tok):
+            if not self.c.ID.isEndPhrasePunc(word):
+                saveTok.append(word);
+                saveTag.append(pos[i]);
+            else:
+                idxs.append(i+1);
+                saveTok.append(word);
+                saveTag.append(pos[i]);
+                newTok.append(saveTok);
+                newTag.append(saveTag);
+                saveTok = [];
+                saveTag = [];
+        idxs.append(len(tok));
+        (qIdx, qWord) = self.qWord;
+        for idx in range(len(idxs)-1):
+            if idxs[idx] <= qIdx and qIdx < idxs[idx+1]: 
+                return (newTok, newTag, (idx, idxs[idx]));
+        return newTok, newTag, (0,0);
 
+    # Arranges a question when the question word is preceeded by a verb
+    def verbPreArr(self, tok, qIdx):
+        qTok = [];
+        beginning = tok[qIdx:];
+        if isinstance(beginning,list):
+            qTok += beginning;
+        else:
+            qTok += [beginning];
+        qTok += [tok[qIdx-1]];
+        if qIdx-1 > 0:
+            tok[0] = wordToLower(tok[0]);
+            qTok += tok[0:qIdx-1];
+        return qTok;
+    
+    # Arranges a question when the question word is followed by a verb
+    def verbPostArr(self, tok, qIdx):
+        qTok = [];
+        beginning = tok[qIdx:];
+        if isinstance(beginning,list):
+            qTok += beginning;
+        else:
+            qTok += [beginning];
+        # does not copy the first word if what is the second word
+        # my socks are black today > my what are black today >
+        # what are black today
+        if qIdx-1 > 0:
+            tok[0] = wordToLower(tok[0]);
+            qTok += tok[0:qIdx];
+        return qTok;
+
+    # rearranges sentences to flow more naturally
+    def formatQuestion(self):
+        # split sentences by commas, keeping only the phrase 
+        # with the question word 
+        # PROS: simplifies question, easier to make grammatical
+        # CONS: ambiguity, possible erradication of important points
+        #### currently everything is reattached later
+        (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
+        if pSel != -1:
+            tok = phraseTok[pSel];
+            pos = phraseTag[pSel];
+        else:
+            tok = phraseTok;
+            pos = phraseTag;
+        punc = tok[-1];
+        # add question mark. 
+        if self.c.ID.isEndPhrasePunc(punc):
+            x = tok.pop(-1);
+        (qIdx, word) = self.qWord;
+        qIdx = qIdx - idxOffset;
+        if qIdx != 0:
+            # question word follow a verb
+            if is_verb(pos[qIdx-1]):
+                qTok = self.verbPreArr(tok,qIdx);
+            # question word preceeds a verb
+            elif qIdx < len(tok) and is_verb(pos[qIdx+1]):
+                qTok = self.verbPostArr(tok,qIdx);
+            # question word in preposition etc
+            else: qTok = tok;
+        # case: question word already in front, 
+        #   only need to change punctuation
+        else: qTok = tok;
+        # add other details back into the question
+        for i, phrase in enumerate(phraseTok):
+            if pSel != -1 and i != pSel:
+                print phrase;
+                qTok += phrase[0:-1];
+        qTok += ['?'];
+        question  =  self.c.sentJoin(qTok);        
+        # capitalize first letter
+        self.out =  question[0].upper() + question[1:];
+        return;
 
     # creates question by replacing the first date
     # replaces with "what" or "what date" instead of "when" 
     # because that seems to work better grammatically most of the time
-    def qFromDate(self,tok,POS, origN):
-        if "#DATE" in set(POS):
-            idx = POS.index("#DATE");
-            if idx < len(tok)-1 and POS[idx+1] == "IN":
+    def qFromDate(self):
+        tok = self.tokens;
+        pos = self.tags;
+        origN = self.N
+        if "#DATE" in set(pos):
+            idx = pos.index("#DATE");
+            if len(tok[idx]) == 4:
+                tok[idx] = "what year";
+            elif idx < len(tok)-1 and pos[idx+1] == "IN":
                 tok[idx] = "when";
-            elif idx > 0 and is_verb(POS[idx-1]):
+            elif idx > 0 and is_verb(pos[idx-1]):
                     tok[idx] = "what";
             else:
                 tok[idx] = "what date";
-            return self.c.sentJoin(tok);
-        else:
-            return "";
+            self.qWord = (idx, tok[idx]);
+            return True;
+        else: return False;
 
-    # creates a question by replacing the first noun with "what"
-    def qFromNoun(self,tok,POS):
-        for i,tag in enumerate(POS):
-            if is_noun(tag):
-                tok[i] = "what";
-                return self.c.sentJoin(tok);
-        return "";
+    # creates a question by replacing the first noun or pronoun 
+    # that preceeds a verb with "what or who" as appropriate"
+    def qFromNoun(self):        
+        tok = self.tokens;
+        pos = self.tags;
+        for i,tag in enumerate(pos[0:-1]):
+            nextTag = pos[i+1];
+            if is_verb(nextTag):    
+                if is_noun(tag):
+                    if len(tag) > 2 and tag[0:3] == "NNP":
+                        tok[i] = "who";
+                    else:
+                        tok[i] = "what";
+                    self.keyVerb = (i+1,pos[i+1]);
+                    self.qWord = (i, tok[i]);
+                elif tag == "PRP":
+                    tok[i] = "who";
+                    self.keyVerb = (i+1, pos[i+1]);
+                    self.qWord = (i, tok[i]);
+                return True;
+        return False;
 
     def make(self,sentence):
-        combi = self.c
+        combi = self.c;
+        toks = self.tokens;
+        pos = self.tags;
 
-        toks = nltk.word_tokenize(sentence.strip());
-        POS = rdrpos.pos_tag(sentence.strip());
-        N = len(toks);
-
-        # find date locations and replace them in the given, toks, POS
-        combi.dates(toks, POS);
-
+        # find date locations and replace them in the given, toks, pos
+        combi.dates(toks, pos);
+        combi.names(toks, pos);
+#        print "TOKS: ",self.tokens;
+#        print "pos:: ",self.tags;
         # check for context based on timing (might require change of verb)
-        timeFlag = combi.ID.isTimeDep(toks,0);
-        print timeFlag;
-
-#        print toks;
-#        print POS;
-        question = self.qFromDate(toks,POS,N);
-        if question != "":
-            question = self.formatQuestion(question);        
-            return question;
-        question = self.qFromNoun(toks,POS);
-        if question != "":
-            question = self.formatQuestion(question);
-            return question;
-        return question;
-
+#        timeFlag = combi.ID.isTimeDep(toks,0);
+        if self.qFromDate(): 
+            self.formatQuestion();
+            return;
+        if self.qFromNoun(): 
+            self.formatQuestion();
+            return;
+        return;
