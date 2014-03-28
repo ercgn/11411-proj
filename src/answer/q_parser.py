@@ -55,7 +55,7 @@ class QParser(object):
         # E: Let's create a list of generic verbs that we don't want to include
         # This can be expanded.
 
-        self.ignoredWords = set(["did", "does", "do", "is", "was", "many"])
+        self.ignoredWords = set(["are", "did", "does", "do", "is", "was", "many"])
 
         self.qstr = question
         self.qtok = nltk.word_tokenize(question)
