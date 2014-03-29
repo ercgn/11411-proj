@@ -9,7 +9,9 @@
 # Aaron Anderson
 # Rachel Kobayashi
 #
-# TODO: Make a specialized <li> list set for articles that have lists.
+# TODO: -Make a specialized <li> list set for articles that have lists.
+#       -Edit BestAnswer2 to account for multiple instances of keywords 
+#           (similar to the reason why we need that break statement)
 
 import nltk, copy
 import util.rdrpos
@@ -20,18 +22,19 @@ from util.article_parser import MyHTMLParser
 from answer.q_parser import QParser
 
 #Various flags. 0 = False. 1 = True
-DEBUG = 0
-VERBOSE = 0 #More print statements
+DEBUG = 1
+VERBOSE = 1 #More print statements
 USE_HEURISTIC = 1 #Keep at 1, as the non-heuristic code is mostly deprecated.
 
 #HEURISTIC:
 # The purpose of the heuristic is to put a weight to certain key words based
 # on their importance. This heuristic ranks nouns and proper nouns higher than
 # other parts of speeches, like verbs and adjectives.
+HIGH_SCORE = 10
 CUSTOM_SCORE = 7
 NUM_SCORE = 5
 NOUN_SCORE = 5
-VERB_SCORE = 3
+VERB_SCORE = 4
 ADJ_SCORE = 3
 SYN_SCORE = 1
 
@@ -63,12 +66,29 @@ class Answer(object):
         #In the english language, numbers between 1-11 are written out.
         self.numList = ["one", "two", "three", "four", "five", "six", "seven",
                         "eight", "nine", "ten", "eleven"]
+        self.quantifierList = ["hundred", "thousand", "million", "billion"]
+        
+        #Removed "may" from the date list because "may" is too common of a word
+        self.dateList = ['january','february','march','april','june',
+              'july', 'august','september','october','november','december']
         
         self.qType = None
         self.keyWordList = None
         self.qtok = None
         self.posTag = None
         self.findSynonyms = []
+        
+    def removeArticleTitle(self, keyWordList):
+        # E: When we add words, we might be adding article title words
+        # again. We don't want them.
+        keyWordGroup = zip(keyWordList, self.posTag)
+        keyWordGroup = filter(lambda x: x[0] not in self.titleList,
+                            keyWordGroup)
+        keyWordList, posTag = zip(*keyWordGroup)
+        keyWordList = list(keyWordList)
+        self.posTag = list(posTag)
+        return keyWordList
+    
 
     def bestAnswer(self, keyWordList):
         # This is the main algorithm for finding an answer in the article file
@@ -95,11 +115,36 @@ class Answer(object):
         maxScore = 0
         bestSentence = None
         for sentence in self.sList:
+            trigger = False
             curScore = 0
             stok = nltk.word_tokenize(sentence.lower())
             for i in xrange(len(keyWordList)):
                 tag = self.posTag[i]
                 for j in xrange(len(stok)):
+                    # E: initial score based on question type
+                    # Crit section: comment out this part if it doesn't
+                    # work. (It didn't work)
+                    
+                    #if self.qType == "How many":
+                    #    tmp = False
+                    #    for word in self.numList:
+                    #        if nhelp.hasSameStem(word, stok[j]):
+                    #            tmp = True
+                    #            trigger = True
+                    #            curScore += CUSTOM_SCORE
+                    #            break
+                    #    if not tmp:
+                    #        for word in self.quantifierList:
+                    #            if nhelp.hasSameStem(word, stok[j]):
+                    #                curScore += CUSTOM_SCORE
+                    #                break
+                    #elif self.qType == "When":
+                    #    for word in self.dateList:
+                    #        if nhelp.hasSameStem(word, stok[j]):
+                    #            curScore += CUSTOM_SCORE
+                    #            break
+                    ## End Crit Section
+                    
                     if nhelp.hasSameStem(keyWordList[i], stok[j]):
                         if qutil.is_noun(tag):
                             curScore += NOUN_SCORE
@@ -113,6 +158,8 @@ class Answer(object):
                             curScore += NUM_SCORE
                         elif qutil.is_custom(tag):
                             curScore += CUSTOM_SCORE
+                        elif qutil.is_high_priority(tag):
+                            curScore += HIGH_SCORE
                         else:
                             print "ERROR: No matching tag. for %s. Please tell Eric" % (tag)
                         #E: If we want to count multiple occurances of words in
@@ -123,7 +170,7 @@ class Answer(object):
                         break
             #E: added this line to make the score proportional to the length
             # of the sentence. Adds fairness.
-            if DEBUG and VERBOSE and curScore != 0:
+            if DEBUG and VERBOSE and curScore > 1:
                 print sentence
                 print curScore
             if curScore > maxScore:
@@ -132,6 +179,8 @@ class Answer(object):
         if DEBUG: print "MaxScore:", maxScore
         if maxScore <= 2:
             #insignificant match: controls misfires with synonyms
+            return None
+        if self.qType == "Yes/No" and maxScore < NOUN_SCORE:
             return None
         return bestSentence
 
@@ -149,11 +198,15 @@ class Answer(object):
         print rdrpos.pos_tag(sentence)
 
     def answerHowMany(self, keyWordList):
-        #Increase the numeric score
-        pos = ["JJS" for i in xrange(len(self.numList))]
+        pos = ["VB" for i in xrange(len(self.numList))]
         keyWordList += self.numList
+        pos += ["CST" for i in xrange(len(self.quantifierList))]
+        keyWordList += self.quantifierList
         self.posTag += pos
         answer = None
+        
+        keyWordList = self.removeArticleTitle(keyWordList)
+        
         if USE_HEURISTIC:
             answer = self.bestAnswer2(keyWordList)
         else:
@@ -180,6 +233,9 @@ class Answer(object):
             return self.bestAnswer(keyWordList)
 
     def answerWhen(self, keyWordList):
+        pos = ["CST" for i in xrange(len(self.dateList))]
+        keyWordList += self.dateList
+        self.posTag += pos
         if USE_HEURISTIC:
             return self.bestAnswer2(keyWordList)
         else:
@@ -262,12 +318,18 @@ class Answer(object):
             # Synonym Generator code
             kwGroupCpy = copy.deepcopy(keyWordGroup)
             for pair in kwGroupCpy:
+                #We don't want synonyms of proper nouns
+                if pair[1] == "NNP": continue
                 word = pair[0]
                 tag = "SYN" #pair[1] <<if we want to preseve tag, use this.
                 #add finding synonyms for specific parts of speech
                 synonyms = nhelp.getSynonyms(word)
                 synonyms = map(lambda x: (x, tag), synonyms)
                 keyWordGroup += synonyms
+                
+                
+            keyWordGroup = map(lambda x: (nhelp.getStem(x[0]), x[1]),
+                             keyWordGroup)    
             keyWordGroup = self.removeDuplicate(keyWordGroup)
             
             keyWordList, posTag = zip(*keyWordGroup)
@@ -305,6 +367,7 @@ class Answer(object):
                 answer = self.answerWhat(keyWordList)
             elif "how" == questionList[0]:
                 answer = self.answerMisc(keyWordList)
+                self.qType = "How"
             elif ("is" in questionList
                 or "was" in questionList
                 or "did" in questionList):
@@ -338,12 +401,16 @@ if __name__ == '__main__':
                    "../data/set2/a5.htm",
                    "../data/set1/a10.htm",
                    "../data/set3/a2.htm",
-                   "../data/set3/a7.htm"]
+                   "../data/set3/a7.htm",
+                   "../data/set4/a4.htm",
+                   "../data/set4/a3.htm"]
         questionPath = ["../testQ/aries_easy.txt",
                     "../testQ/cancer_mixed.txt",
                     "../testQ/johnterry_easy.txt",
                     "../testQ/chinese_mixed.txt",
-                    "../testQ/python_mixed.txt"]
+                    "../testQ/python_mixed.txt",
+                    "../testQ/milliondollarbaby_easy.txt",
+                    "../testQ/slumdogmillionaire_mixed.txt"]
         
         for i in xrange(len(articlePath)):
             articleFile = articlePath[i]
