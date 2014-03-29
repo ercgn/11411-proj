@@ -46,11 +46,15 @@ def is_adj(tag):
 def is_num(tag):
     return (tag[:2] == "CD")
 
+# E: Custom Tags used for the answering driver.
 def is_syn(tag):
     return (tag == "SYN")
 
 def is_custom(tag):
     return (tag == "CST")
+
+def is_high_priority(tag):
+    return (tag == "HGH")
 
 def wordToLower(word):
     tagU = rdrpos.pos_tag(word);
