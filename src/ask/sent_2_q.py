@@ -245,7 +245,7 @@ class ConstructQuestion(object):
         # find date locations and replace them in the given, toks, pos
         combi.dates(toks, pos);
         combi.names(toks, pos);
-        print "TOKS: ",self.tokens;
+#        print "TOKS: ",self.tokens;
 #        print "pos:: ",self.tags;
         # check for context based on timing (might require change of verb)
 #        timeFlag = combi.ID.isTimeDep(toks,0);
