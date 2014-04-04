@@ -98,20 +98,21 @@ class Combine(object):
         dateLoc = self.ID.findDates(words,tags);
         self.words = words;
         self.tags = tags;
-        
+
         self.joinWordTag(dateLoc, DATE_TAG);
         
         self.words = None;
         self.tags = None;
+        self.nltkTags = None;
         return;
 
     def names(self, words, tags):
-        nameLoc = self.ID.findNmPrefix(words, tags);
+        pNameLoc = self.ID.findNER(words,tags);
         self.words = words;
         self.tags = tags;
-        
-        self.joinWordTag(nameLoc,"NNP_PER");
-        
+        self.joinWordTag(pNameLoc,"NNP");
+        propPrepLoc = self.ID.findPropPrep(words,tags);
+        self.joinWordTag(propPrepLoc,"NNP");
         self.words = None;
         self.tags = None;
         return;
