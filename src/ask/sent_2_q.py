@@ -28,6 +28,7 @@ class ConstructQuestion(object):
         self.tags = rdrpos.pos_tag(sentence.strip());
         self.nltkTags = nltk.pos_tag(self.tokens);
         self.out = "";
+        self.qWord = None;
         self.N = len(self.tokens);
         self.make(sentence);
 
@@ -104,41 +105,44 @@ class ConstructQuestion(object):
         # PROS: simplifies question, easier to make grammatical
         # CONS: ambiguity, possible erradication of important points
         #### currently everything is reattached later
-        (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
-        if pSel != -1:
-            tok = phraseTok[pSel];
-            pos = phraseTag[pSel];
+        if self.qWord == None:
+            self.out = "";
         else:
-            tok = phraseTok;
-            pos = phraseTag;
-        punc = tok[-1];
-        # add question mark. 
-        if self.c.ID.isEndPhrasePunc(punc):
-            x = tok.pop(-1);
-        (qIdx, word) = self.qWord;
-        qIdx = qIdx - idxOffset;
-        if qIdx != 0:
-            # question word follow a verb
-            if is_verb(pos[qIdx-1]):
-                qTok = self.verbPreArr(tok,qIdx);
-            # question word preceeds a verb
-            elif qIdx < len(tok) and is_verb(pos[qIdx+1]):
-                qTok = self.verbPostArr(tok,qIdx);
-            # question word in preposition etc
+            (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
+            if pSel != -1:
+                tok = phraseTok[pSel];
+                pos = phraseTag[pSel];
+            else:
+                tok = phraseTok;
+                pos = phraseTag;
+            punc = tok[-1];
+            # add question mark. 
+            if self.c.ID.isEndPhrasePunc(punc):
+                x = tok.pop(-1);
+            (qIdx, wrd) = self.qWord;
+            qIdx = qIdx - idxOffset;
+            if qIdx != 0:
+                # question word follow a verb
+                if is_verb(pos[qIdx-1]):
+                    qTok = self.verbPreArr(tok,qIdx);
+                # question word preceeds a verb
+                elif qIdx < len(tok) and is_verb(pos[qIdx+1]):
+                    qTok = self.verbPostArr(tok,qIdx);
+                # question word in preposition etc
+                else: qTok = tok;
+            # case: question word already in front, 
+            #   only need to change punctuation
             else: qTok = tok;
-        # case: question word already in front, 
-        #   only need to change punctuation
-        else: qTok = tok;
-        # add other details back into the question
-        for i, phrase in enumerate(phraseTok):
-            if pSel != -1 and i != pSel:
-#                print phrase;
-                qTok += phrase[0:-1];
-        qTok += ['?'];
-        question  =  self.c.sentJoin(qTok);        
-        # capitalize first letter
-        self.out =  question[0].upper() + question[1:];
-        return;
+            # add other details back into the question
+            for i, phrase in enumerate(phraseTok):
+                if pSel != -1 and i != pSel:
+                    #                print phrase;
+                    qTok += phrase[0:-1];
+            qTok += ['?'];
+            question  =  self.c.sentJoin(qTok);        
+            # capitalize first letter
+            self.out =  question[0].upper() + question[1:];
+            return;
 
     # creates question by replacing the first date
     # replaces with "what" or "what date" instead of "when" 
