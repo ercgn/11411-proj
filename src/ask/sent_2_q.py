@@ -197,6 +197,8 @@ class ConstructQuestion(object):
                 tok[idx] = "who";
             elif pFlag == -1:
                 tok[idx] = "whom";
+            elif pFlag == 2: 
+                tok[idx] = "whose";
         else:
             tok[idx] = "what";       
         self.qWord = (idx, tok[idx]);

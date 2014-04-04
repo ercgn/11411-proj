@@ -35,6 +35,7 @@ linkVerb = set(['is', 'am', 'are','was']);
 endPhrasePunc = set(['!', ',','.',';','?']);
 subPronouns = set(['he','she','we','they','i']);
 objPronouns = set(['her','him','me','us','them']);
+posPronouns = set(['their','his','her','our','my']);
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
 # but that is mostly applied when used multiple times)
@@ -64,6 +65,8 @@ class Identity(object):
             return 1;
         elif word.lower() in objPronouns:
             return -1;
+        elif word.lower() in posPronouns:
+            return 2;
         else:
             return 0;
 
