@@ -32,6 +32,7 @@ from util.article_parser import MyHTMLParser
 from util.set_defs import Identity
 
 import util.qutil as qutil
+import util.rdrpos as rdrpos
 import random
 import nltk
 import sys
@@ -61,7 +62,7 @@ def isSentence(s):
         return False
     
     # Generate the POS tags for the words in the sentence
-    tags = [x[1] for x in nltk.pos_tag(toks)]
+    tags = rdrpos.pos_tag(s)
     
     # Check for existence of verb
     hasVerb = reduce(lambda x,y: x or y, map(qutil.is_verb, tags))
@@ -140,6 +141,7 @@ if __name__ == "__main__":
             print questions[i][2]
             # Print corresponding generated question
             print questions[i][0]
+            print ''
         
         print ''  # blank line (I like blank lines at the end of output!)
         
