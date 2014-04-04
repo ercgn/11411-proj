@@ -8,11 +8,13 @@
 #  where article_file.htm is the HTML file containing the article HTML content
 #  and N is an integer specifying the number of questions to output.
 #
-# The algorithm picks c*N sentences from the article text at random, where c
-# is a constant.  It then turns them into questions using the
-# ConstructQuestion class from sent_2_q.py, and scores each one using a
-# probabalistic language model.  The N highest-scoring questions are then
-# written to standard out.
+# The algorithm iterates over each reasonable sentence in the article.  A
+# reasonable sentence is defined by the combination of several metrics, such
+# as a minimum length, presence of a verb, and appropriate ending punctuation.
+# For each reasonable sentence, it turns it into a question using the
+# ConstructQuestion class from sent_2_q.py, and scores each generated question
+# using a probabalistic language model.  The N highest-scoring questions are
+# then written to standard out.
 #
 # Error 501: Not Yet Implemented
 #
@@ -27,7 +29,9 @@
 from ask.q_scorer import QuestionScorer
 from ask.sent_2_q import ConstructQuestion
 from util.article_parser import MyHTMLParser
+from util.set_defs import Identity
 
+import util.qutil as qutil
 import random
 import nltk
 import sys
@@ -40,41 +44,37 @@ usage = """Usage: ./ask.py article_file.htm N
     and N is an integer specifying the number of questions to output.
 """
 
-# C is the proportion of questions generated to questions output.
-# I.e. if the desired number of questions is N, the number of
-# questions generated will be C*N.  The program then outputs the
-# N questions with the highest scores.
-#
-# TODO:
-# This is in lieu of a model where we repeatedly generate questions
-# until we have N questions with a score above some absolute threshold.
-# We should talk about which model is more desirable, and why, or if we
-# want to combine both models in some fashion.
-C = 10
+# Minimum number of tokens required in a sentence to turn it into a question
+MIN_SENTENCE_LENGTH = 10
 
 ### FUNCTIONS ###
 
-# Picks n random sentences out of the given list of sentences without
-# replacement.  Output is a tuple (sentences, k) where sentences is a list
-# of unique sentences chosen from sentenceList, and k is the number of
-# sentences that were chosen.
-# In the ideal case, k == n, but if len(sentenceList) < n,
-# k == len(sentenceList) instead and sentences == sentenceList
-def pickSentences(sentenceList, n):
-    if len(sentenceList) < n:
-        return (sentenceList, len(sentenceList))
-    else:
-        # Pick n random indices without replacement from which
-        # we will select the sentences
-        indices = random.sample(xrange(len(sentenceList)), n)
-        sentences = [sentenceList[i] for i in indices]
-        return (sentences, len(sentences))
-
-# Returns True if the string s contains any alphanumeric character.
-# Needed to filter the sentence list to remove any "sentences" which are
-# really just empty space or newlines.
-def containsAlphanum(s):
-    return reduce(lambda x,y: x or y, [c.isalpha() for c in s])
+# Returns True if the string s can reasonably be described as a sentence
+# There are many metrics to decide whether a string is a sentence;
+# including length, containing a verb, end punctuation, etc.  The function
+# will only return True if each implemented criteria is satisfied.
+def isSentence(s):
+    # Get the tokens of the sentence.  It's possible there are none,
+    # in which case this is definitely not a sentence.
+    toks = nltk.word_tokenize(s)
+    if len(toks) == 0:
+        return False
+    
+    # Generate the POS tags for the words in the sentence
+    tags = [x[1] for x in nltk.pos_tag(toks)]
+    
+    # Check for existence of verb
+    hasVerb = reduce(lambda x,y: x or y, map(qutil.is_verb, tags))
+    
+    # Check for a reasonable length
+    isMinLength = (len(toks) > MIN_SENTENCE_LENGTH)
+    
+    # Check for correct end punctuation
+    i = Identity()
+    hasEndPunct = i.isEndPhrasePunc(toks[-1])
+    
+    # Must have all criteria to be deemed a reasonable sentence
+    return hasVerb and isMinLength and hasEndPunct
 
 # Checks for the presence and right number of command line
 # arguments, and returns the article filename and number of
@@ -108,23 +108,27 @@ if __name__ == "__main__":
         
         # Retrieve the list of sentences within the article from the parser
         sentenceList = parser.grabTextSentenceList()
-        sentenceList = filter(containsAlphanum, sentenceList)
-        
-        # Pick C*N sentences which will be turned into questions
-        (shortSentenceList, k) = pickSentences(sentenceList, C*N)
+        sentenceList = filter(isSentence, sentenceList)
         
         # Instantiate a QuestionScorer and generate a (question,score) pair
-        # for each sentence in shortSentenceList
+        # for each sentence in the sentenceList
         scorer = QuestionScorer()
         questions = []
-        for sent in shortSentenceList:
-            print sent
-            constructor = ConstructQuestion(sent)
-            q = constructor.out
-            print q
+        for sent in sentenceList:
+            try: 
+                constructor = ConstructQuestion(sent)
+                q = constructor.out
+                if q == '':
+                    # Unable to successfully generate a question; discard
+                    continue
+            except Exception, msg:
+                print 'WARNING: Exception in constructing question!'
+                print 'Please track this down and figure out what went wrong'
+                print msg
+                continue
             qToks = nltk.word_tokenize(q.strip())
             s = scorer.score(qToks)
-            questions.append((q,s))
+            questions.append((q,s,sent))
         
         # Sort the questions by score in descending order (so highest score
         # questions are first
@@ -132,9 +136,12 @@ if __name__ == "__main__":
         
         # Output the first N questions (these have the highest score)
         for i in xrange(N):
+            # TODO: remove.  Prints corresponding sentence for reference only
+            print questions[i][2]
+            # Print corresponding generated question
             print questions[i][0]
         
-        print ''  # blank line (I like blank lines at the end of output!!!)
+        print ''  # blank line (I like blank lines at the end of output!)
         
     except IOError, msg:
         print "An I/O error occurred while processing the article.  Details:"
