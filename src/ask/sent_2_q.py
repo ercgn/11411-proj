@@ -27,6 +27,10 @@ class ConstructQuestion(object):
         self.tokens = nltk.word_tokenize(sentence.strip());
         self.tags = rdrpos.pos_tag(sentence.strip());
         self.nltkTags = nltk.pos_tag(self.tokens);
+        # check if capitaliaztion is necessary and otherwise remove. 
+        if (self.nltkTags[0] != self.tags[0]) and \
+           self.c.ID.isReplacablePronoun(self.tokens[0]):
+            self.tokens[0] = self.tokens[0].lower();
         self.out = "";
         self.qWord = None;
         self.N = len(self.tokens);
@@ -98,6 +102,17 @@ class ConstructQuestion(object):
             qTok += tok[0:qIdx];
         return qTok;
 
+    def removeLeadingArticle(self):
+        toks = self.tokens;
+        tags = self.tags;
+        if self.qWord != None:
+            (idx, word) = self.qWord;
+            if word == "who" and idx > 0:
+                if tags[idx-1] == "DT":
+                    toks.pop(idx-1);
+                    tags.pop(idx-1);
+                    self.qWord = (idx-1,word);
+
     # rearranges sentences to flow more naturally
     def formatQuestion(self):
         # split sentences by commas, keeping only the phrase 
@@ -108,6 +123,7 @@ class ConstructQuestion(object):
         if self.qWord == None:
             self.out = "";
         else:
+            self.removeLeadingArticle();
             (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
             if pSel != -1:
                 tok = phraseTok[pSel];
@@ -136,9 +152,9 @@ class ConstructQuestion(object):
             # add other details back into the question
             for i, phrase in enumerate(phraseTok):
                 if pSel != -1 and i != pSel:
-                    #                print phrase;
+                    #print phrase;
                     qTok += phrase[0:-1];
-            qTok += ['?'];
+            qTok += ['?'];            
             question  =  self.c.sentJoin(qTok);        
             # capitalize first letter
             self.out =  question[0].upper() + question[1:];
@@ -167,6 +183,40 @@ class ConstructQuestion(object):
 
     # creates a question by replacing the first noun or pronoun 
     # that preceeds a verb with "what or who" as appropriate"
+
+    def replaceNounWithQ(self, idx):
+        tok = self.tokens;
+        pos = self.tags;
+        nounTag = pos[idx];
+        word = tok[idx];
+        if (len(nounTag) > 2 and nounTag[0:3] == "NNP"):
+            tok[idx] = "who";
+        elif nounTag == "PRP":
+            pFlag = self.c.ID.isReplacablePronoun(word);
+            if pFlag == 1:
+                tok[idx] = "who";
+            elif pFlag == -1:
+                tok[idx] = "whom";
+        else:
+            tok[idx] = "what";       
+        self.qWord = (idx, tok[idx]);
+        return;
+
+    def qFromNoun(self):
+        pos = self.tags;
+        lastCandidate = None;
+        for i,tag in enumerate(pos):
+            if is_noun(tag):
+                lastCandidate = i;
+            elif tag == "PRP" and \
+                 (self.c.ID.isReplacablePronoun(self.tokens[i]) != 0):
+                lastCandidate = i;
+            elif is_verb(tag):
+                if lastCandidate != None:
+                    self.replaceNounWithQ(lastCandidate);
+                    return True;
+        return False;
+    """
     def qFromNoun(self):        
         tok = self.tokens;
         pos = self.tags;
@@ -186,7 +236,7 @@ class ConstructQuestion(object):
                     self.qWord = (i, tok[i]);
                 return True;
         return False;
-
+    """
     def make(self,sentence):
         combi = self.c;
         toks = self.tokens;
