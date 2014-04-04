@@ -15,6 +15,7 @@
 import re;
 from collections import deque;
 from qutil import *
+import nltk;
 
 # set definitions here
 # allows for quick change
@@ -136,7 +137,69 @@ class Identity(object):
             tagset.popleft();
         return locations;
 
-    def findNmPrefix(self, wordList, tagList):
+    # cheap Named Entity Recognition (really only identifying 
+    #   capitalizaed strings of words, does not take into account meaning
+    #   does not include the first word of the sentence unless it is 
+    #   undenibly "Proper"
+    def findNER(self, wordList, tagList):
+        n = len(wordList);
+        nltkTag = nltk.pos_tag(wordList);
+        locations = [];
+        idx = 0;
+        propStrLen = 0;
+        if tagList[idx] == "NNP" and nltkTag[idx][1] == "NNP":
+            tag = tagList[idx];
+        elif n > 1: 
+            idx += 1;
+            tag = tagList[idx];
+        while idx < n:
+            if self.isPropN(wordList[idx], tagList[idx]):
+                propStrLen += 1;
+            else:
+                if propStrLen > 1:
+                    locations.append((idx-propStrLen,propStrLen));
+                propStrLen = 0;
+            idx += 1;
+        return locations;
+
+    # determinds if a word is proper noun based on the tag "NNP"
+    # or the capitalization
+    def isPropN(self,word, tag):
+        return tag == "NNP" or word[0].isupper();
+
+    # finds of a subset list is of the form "NNP of/and the NNP"
+    #   or "NNP of NNP"
+    # returns the length of the phrase or 0 if not one
+    def NNPoftheNNP(self, wordList, tagList):
+        n = len(tagList);
+        if n >= 3:
+            if self.isPropN(wordList[0],tagList[0]) and \
+                (tagList[1] == "IN" or tagList[1] == "CC" or tagList[1] == ":"):
+                if self.isPropN(wordList[2],tagList[2]):
+                    return 3;
+                elif n >= 4:
+                    if tagList[2] == "DT":
+                        if self.isPropN(wordList[3],tagList[3]):
+                            return 4;
+        return 0;
+
+    # finds locations of Proper Prepositional phrases such as
+    # Lord of the Rings, Harry Potter and the _______
+    # wrapper function for the above NNPoftheNNP 
+    def findPropPrep(self, wordList, tagList):
+        locations = [];
+        for idx in range(len(tagList)):
+            if self.isPropN(wordList[idx],tagList[idx]):
+                subWord = wordList[idx:idx+4];
+                subTags = tagList[idx:idx+4];
+                n = self.NNPoftheNNP(subWord,subTags);
+                if n > 0:
+                    locations.append((idx,n));
+        return locations;
+
+    # now deprecated with the above changes
+    # used to find NamePrefix First Name, Last Name
+    def findNm(self, wordList, tagList):
         prevTag = tagList[0];
         locations = [];
         for idx in range(1, len(tagList)):
@@ -147,5 +210,9 @@ class Identity(object):
                         locations.append((idx-1, 3));
                     else:
                         locations.append((idx-1, 2));
+                elif idx > 0 and idx < len(tagList) - 2:
+                    lenPropPhrase = NNPoftheNNP(tagList[idx-1:idx+3]);
+                    if lenPropPhrase > 0:
+                        locations.append((idx-1,lenPropPhrase));
             prevTag = tag;
         return locations;

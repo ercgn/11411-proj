@@ -26,6 +26,7 @@ class ConstructQuestion(object):
         self.c = Combine();
         self.tokens = nltk.word_tokenize(sentence.strip());
         self.tags = rdrpos.pos_tag(sentence.strip());
+        self.nltkTags = nltk.pos_tag(self.tokens);
         self.out = "";
         self.N = len(self.tokens);
         self.make(sentence);
@@ -131,7 +132,7 @@ class ConstructQuestion(object):
         # add other details back into the question
         for i, phrase in enumerate(phraseTok):
             if pSel != -1 and i != pSel:
-                print phrase;
+#                print phrase;
                 qTok += phrase[0:-1];
         qTok += ['?'];
         question  =  self.c.sentJoin(qTok);        
@@ -190,11 +191,11 @@ class ConstructQuestion(object):
         # find date locations and replace them in the given, toks, pos
         combi.dates(toks, pos);
         combi.names(toks, pos);
-#        print "TOKS: ",self.tokens;
+        print "TOKS: ",self.tokens;
 #        print "pos:: ",self.tags;
         # check for context based on timing (might require change of verb)
 #        timeFlag = combi.ID.isTimeDep(toks,0);
-        if self.qFromDate(): 
+        if self.N < 15 and self.qFromDate(): 
             self.formatQuestion();
             return;
         if self.qFromNoun(): 
