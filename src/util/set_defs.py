@@ -33,7 +33,8 @@ qWords = set(['who','what','where','when','why','did','do','does','is','was','ho
 namePre = set(['mr.', 'mrs.', 'ms.', 'dr.', 'miss']);
 linkVerb = set(['is', 'am', 'are','was']);
 endPhrasePunc = set(['!', ',','.',';','?']);
-
+subPronouns = set(['he','she','we','they','i']);
+objPronouns = set(['her','him','me','us','them']);
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
 # but that is mostly applied when used multiple times)
@@ -57,6 +58,14 @@ class Identity(object):
 
     def isEndPhrasePunc(self,word):
         return word.lower() in endPhrasePunc;
+
+    def isReplacablePronoun(self,word):
+        if word.lower() in subPronouns:
+            return 1;
+        elif word.lower() in objPronouns:
+            return -1;
+        else:
+            return 0;
 
     def isMonth(self,word):
         return word.lower() in months;
