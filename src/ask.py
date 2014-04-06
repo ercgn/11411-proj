@@ -29,11 +29,8 @@
 from ask.q_scorer import QuestionScorer
 from ask.sent_2_q import ConstructQuestion
 from util.article_parser import MyHTMLParser
-from util.set_defs import Identity
 
 import util.qutil as qutil
-import util.rdrpos as rdrpos
-import random
 import nltk
 import sys
 
@@ -45,37 +42,7 @@ usage = """Usage: ./ask.py article_file.htm N
     and N is an integer specifying the number of questions to output.
 """
 
-# Minimum number of tokens required in a sentence to turn it into a question
-MIN_SENTENCE_LENGTH = 10
-
 ### FUNCTIONS ###
-
-# Returns True if the string s can reasonably be described as a sentence
-# There are many metrics to decide whether a string is a sentence;
-# including length, containing a verb, end punctuation, etc.  The function
-# will only return True if each implemented criteria is satisfied.
-def isSentence(s):
-    # Get the tokens of the sentence.  It's possible there are none,
-    # in which case this is definitely not a sentence.
-    toks = nltk.word_tokenize(s)
-    if len(toks) == 0:
-        return False
-    
-    # Generate the POS tags for the words in the sentence
-    tags = rdrpos.pos_tag(s)
-    
-    # Check for existence of verb
-    hasVerb = reduce(lambda x,y: x or y, map(qutil.is_verb, tags))
-    
-    # Check for a reasonable length
-    isMinLength = (len(toks) > MIN_SENTENCE_LENGTH)
-    
-    # Check for correct end punctuation
-    i = Identity()
-    hasEndPunct = i.isEndPhrasePunc(toks[-1])
-    
-    # Must have all criteria to be deemed a reasonable sentence
-    return hasVerb and isMinLength and hasEndPunct
 
 # Checks for the presence and right number of command line
 # arguments, and returns the article filename and number of
@@ -109,7 +76,7 @@ if __name__ == "__main__":
         
         # Retrieve the list of sentences within the article from the parser
         sentenceList = parser.grabTextSentenceList()
-        sentenceList = filter(isSentence, sentenceList)
+        sentenceList = filter(qutil.isSentence, sentenceList)
         
         # Instantiate a QuestionScorer and generate a (question,score) pair
         # for each sentence in the sentenceList

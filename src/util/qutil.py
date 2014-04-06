@@ -6,8 +6,8 @@
 # used across all functions
 #
 # Rachel Kobayashi
-#   with
 # Aaron Anderson
+#   with
 # Eric Gan
 #
 # E: Can we merge this file wtih perhaps ntlk_helper.py? 
@@ -16,10 +16,17 @@
 
 from collections import deque;
 from copy import deepcopy;
+
+import set_defs as sd
 import util.rdrpos as rdrpos;
+
+import nltk;
 
 # constants
 #DATE_TAG = "#DATE";
+
+# Minimum number of tokens required in a sentence to turn it into a question
+MIN_SENTENCE_LENGTH = 18
 
 # outputs the first n items in queue into a string;
 def q2str(queue, n):
@@ -62,3 +69,32 @@ def wordToLower(word):
     if tagU == tagl:
         return word.lower();
     return word;
+
+
+# Returns True if the string s can reasonably be described as a sentence
+# There are many metrics to decide whether a string is a sentence;
+# including length, containing a verb, end punctuation, etc.  The function
+# will only return True if each implemented criteria is satisfied.
+def isSentence(s):
+    # Get the tokens of the sentence.  It's possible there are none,
+    # in which case this is definitely not a sentence.
+    toks = nltk.word_tokenize(s)
+    if len(toks) == 0:
+        return False
+    
+    # Generate the POS tags for the words in the sentence
+    tags = rdrpos.pos_tag(s)
+    
+    # Check for existence of verb
+    hasVerb = reduce(lambda x,y: x or y, map(is_verb, tags))
+    
+    # Check for a reasonable length
+    isMinLength = (len(toks) > MIN_SENTENCE_LENGTH)
+    
+    # Check for correct end punctuation
+    i = sd.Identity()
+    hasEndPunct = i.isEndPhrasePunc(toks[-1])
+    
+    # Must have all criteria to be deemed a reasonable sentence
+    return hasVerb and isMinLength and hasEndPunct
+
