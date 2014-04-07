@@ -104,11 +104,11 @@ if __name__ == "__main__":
         
         # Output the first N questions (these have the highest score)
         for i in xrange(N):
-            # TODO: remove.  Prints corresponding sentence for reference only
-            print questions[i][2]
+#            # TODO: remove.  Prints corresponding sentence for reference only
+#            print questions[i][2]
             # Print corresponding generated question
             print questions[i][0]
-            print ''
+#            print ''
         
         print ''  # blank line (I like blank lines at the end of output!)
         

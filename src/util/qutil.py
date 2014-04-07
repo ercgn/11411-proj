@@ -26,7 +26,7 @@ import nltk;
 #DATE_TAG = "#DATE";
 
 # Minimum number of tokens required in a sentence to turn it into a question
-MIN_SENTENCE_LENGTH = 18
+MIN_SENTENCE_LENGTH = 10
 
 # outputs the first n items in queue into a string;
 def q2str(queue, n):
