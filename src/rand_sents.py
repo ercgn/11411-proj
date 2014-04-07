@@ -24,6 +24,8 @@
 #    N = 10
 #    article_file.htm = ../data/set1/a2.htm
 #    output_file.txt = test_files/rand_sents.txt
+#  These defaults can be easily changed by editing the Default Parameters
+#  section below.
 #
 #
 # Error 501: Not Yet Implemented
@@ -44,9 +46,9 @@ import sys
 
 ### CONSTANTS ###
 
-# Default parameters
-DEFAULT_ARTICLE_FILENAME = '../data/set1/a2.htm'
+# Default Parameters
 DEFAULT_N = 10
+DEFAULT_ARTICLE_FILENAME = '../data/set1/a2.htm'
 DEFAULT_OUTPUT_FILENAME = 'test_files/rand_sents.txt'
 
 # Picks n random sentences out of the given list of sentences without
@@ -66,7 +68,7 @@ def pickSentences(sentenceList, n):
         return (sentences, len(sentences))
 
 # Parses the command line and gets the appropriate program parameters
-# Returns a tuple (articleFilename, N, outputFilename) with the specified
+# Returns a tuple (N, articleFilename, outputFilename) with the specified
 # values, or default values if none were specified.
 def getInputs():
     # Set defaults
