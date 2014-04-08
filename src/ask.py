@@ -59,6 +59,9 @@ def getInputs():
 ### MAIN ###
 if __name__ == "__main__":
     
+    # Add the path to the nltk data
+    nltk.data.path.append('/afs/andrew.cmu.edu/usr6/ericgan/nltk_data')
+    
     # Get the arguments from the command line
     (articleFilename, N) = getInputs()
     
@@ -110,7 +113,7 @@ if __name__ == "__main__":
             print questions[i][0]
 #            print ''
         
-        print ''  # blank line (I like blank lines at the end of output!)
+#        print ''  # blank line (I like blank lines at the end of output!)
         
     except IOError, msg:
         print "An I/O error occurred while processing the article.  Details:"
