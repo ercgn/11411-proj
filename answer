@@ -1,0 +1,15 @@
+#!/bin/bash
+
+EXPECTED_ARGS=2
+E_BADARGS=65
+
+if [ $# -ne $EXPECTED_ARGS ]
+then 
+    echo "Usage: ./answer <article_html> <question_text>"
+    exit $E_BADARGS
+fi
+
+export NLTK_DATA=/afs/andrew.cmu.edu/usr6/ericgan/nltk_data
+
+cd src
+./answer.py ../$1 ../$2
