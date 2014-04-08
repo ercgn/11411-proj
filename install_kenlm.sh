@@ -19,7 +19,8 @@ else
     wget http://kheafield.com/code/kenlm.tar.gz
     tar -xzf kenlm.tar.gz
     cd kenlm
-    python setup.py install --user
+    /usr/local/bin/python setup.py install --user
+    /usr/bin/python setup.py install --user
     cd ../
 #    rm -rf kenlm/ kenlm.tar.gz
 fi

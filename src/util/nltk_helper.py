@@ -15,9 +15,11 @@
 
 import nltk
 import nltk.data
+import codecs
 from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 from nltk.corpus import wordnet
-from nltk.stem import porter
+from nltk.stem import porter, snowball
+
 
 def parseFileToSentences(file_name):
     punkt_param = PunktParameters()
@@ -46,6 +48,7 @@ def parseTextToSentences(text):
             sentences.extend(sentence_splitter.tokenize(para))
     return sentences
 
+
 def getSynonyms(word):
     syns = wordnet.synsets(word)
     #To get rid of duplicates, we first convert to set.
@@ -59,6 +62,7 @@ def printSynonyms(word):
     print getSynonyms(word)
 
 # Stemmer based on Porter Stemmer.
+# TODO: Maybe look into snowball stemmer? Tried to do this, but unicode conflicts.
 def getStem(word):
     stemmer = porter.PorterStemmer()
     return stemmer.stem(word)

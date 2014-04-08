@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/afs/andrew.cmu.edu/usr6/ericgan/11411-proj/env11411/bin/python
 #
 # answer.py
 #
@@ -22,8 +22,8 @@ from util.article_parser import MyHTMLParser
 from answer.q_parser import QParser
 
 #Various flags. 0 = False. 1 = True
-DEBUG = 1
-VERBOSE = 1 #More print statements
+DEBUG = 0
+VERBOSE = 0 #More print statements
 USE_HEURISTIC = 1 #Keep at 1, as the non-heuristic code is mostly deprecated.
 
 #HEURISTIC:
@@ -175,7 +175,7 @@ class Answer(object):
                 print curScore
             if curScore > maxScore:
                 maxScore = curScore
-                bestSentence = sentence
+                bestSentence = sentence 
         if DEBUG: print "MaxScore:", maxScore
         if maxScore <= 2:
             #insignificant match: controls misfires with synonyms
@@ -213,6 +213,7 @@ class Answer(object):
             answer = self.bestAnswer(keyWordList)
         return answer
 
+    # TODO: To expand for coreference.
     def answerWho(self, keyWordList):
         if USE_HEURISTIC:
             return self.bestAnswer2(keyWordList)
@@ -241,6 +242,7 @@ class Answer(object):
         else:
             return self.bestAnswer(keyWordList)
 
+    # TODO: To expand for coreference.
     def answerWhat(self, keyWordList):
         if USE_HEURISTIC:
             return self.bestAnswer2(keyWordList)
@@ -255,9 +257,15 @@ class Answer(object):
             answer = self.bestAnswer(keyWordList) 
         if answer != None:
             if self.qtok.count("not") % 2:
-                answer = self.genNo()
+                if "not" in nltk.word_tokenize(answer):
+                    answer = self.genYes()
+                else:
+                    answer = self.genNo()
             else:
-                answer = self.genYes()
+                if "not" in nltk.word_tokenize(answer):
+                    answer = self.genNo()
+                else:
+                    answer = self.genYes()
         else:
             if self.qtok.count("not") % 2:
                 answer = self.genYes()

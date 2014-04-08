@@ -43,6 +43,7 @@ class MyHTMLParser(HTMLParser):
         self.topicDict = dict()
 
     def handle_starttag(self, tag, attrs):
+        if tag == "br": return #skip br tags
         self.tagList.append(tag)
         
         # Add the data to the topic dictionary before fetching new category
