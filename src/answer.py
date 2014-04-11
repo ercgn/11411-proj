@@ -307,7 +307,9 @@ class Answer(object):
         while curQ != "":
             curQ = curQ.strip()
             if curQ == "": break
-            print "Q:", curQ
+
+            #prints current question
+            #print "Q:", curQ
             answer = None
 
             qInfo = QParser(curQ)
@@ -387,13 +389,16 @@ class Answer(object):
 
             if DEBUG: print "'%s' question!" % (self.qType)
 
-            print "A:", answer, "\n"
+            print answer
 
             curQ = self.questionfd.readline()
 
 
 if __name__ == '__main__':
-
+    
+    # Add the path to the nltk data
+    nltk.data.path.append('/afs/andrew.cmu.edu/usr6/ericgan/nltk_data')
+    
     def printUsage():
         print "Usage: python %s [articlefile] [quesitonfile]" % (sys.argv[0])
         print "Ex. python %s ../data/set2/a4.htm ../testQ/aries_easy.txt" % (sys.argv[0])
