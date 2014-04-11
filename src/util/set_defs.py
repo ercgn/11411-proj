@@ -36,6 +36,8 @@ endPhrasePunc = set(['!', ',','.',';','?']);
 subPronouns = set(['he','she','we','they','i']);
 objPronouns = set(['her','him','me','us','them']);
 posPronouns = set(['their','his','her','our','my']);
+beingV = set(['is','are','was','were']);
+
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
 # but that is mostly applied when used multiple times)
@@ -57,6 +59,9 @@ RE_X_NNP_CD = '([^C][^D]+) NNP CD'
 #uses python sets for speed. 
 class Identity(object):
 
+    def isBeingVerb(self,word):
+        return word.lower() in beingV;
+
     def isEndPhrasePunc(self,word):
         return word.lower() in endPhrasePunc;
 
@@ -65,8 +70,9 @@ class Identity(object):
             return 1;
         elif word.lower() in objPronouns:
             return -1;
-        elif word.lower() in posPronouns:
+        elif word.lower() == "it":
             return 2;
+        # not pronoun
         else:
             return 0;
 
@@ -78,7 +84,7 @@ class Identity(object):
 
     def isTimeWord(self, word):
         return word.lower() in timewords;
-
+        
     def isQuestionWord(self,word):
         return word.lower() in qWords;
 
@@ -164,8 +170,13 @@ class Identity(object):
         elif n > 1: 
             idx += 1;
             tag = tagList[idx];
+        prevTag = None;
         while idx < n:
-            if self.isPropN(wordList[idx], tagList[idx]):
+            if idx > 0:
+                prevTag = tagList[idx-1];
+            if self.isPropN(wordList[idx], tagList[idx]):            
+                propStrLen += 1;
+            elif prevTag == "NNP" and tagList[idx] == "CD":
                 propStrLen += 1;
             else:
                 if propStrLen > 1:
