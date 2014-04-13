@@ -123,7 +123,6 @@ class ConstructQuestion(object):
     # so that the question reads [verb] [beinning] [end] ?
     # (Forms yes questions without adding / changing word tokens)
     def rearrangeBV(self,vbIdx):
-        # to do: undo sentence start capitalization
         if vbIdx < 0:
             return False;
         pos = self.tags;
@@ -137,7 +136,10 @@ class ConstructQuestion(object):
         if vbIdx > 0:
             beginning = tok[:vbIdx];
             if isinstance(beginning,str):
+                beginning = wordToLower(beginning);
                 beginning = [beginning];
+            else:
+                beginning[0] = wordToLower(beginning[0]);
         # end of sentence
         if vbIdx < len(tok)-1:
             end = tok[vbIdx+1:];
@@ -371,10 +373,13 @@ class ConstructQuestion(object):
     def qYesNo(self):
         tok = self.tokens;
         pos = self.tags;
+        seenVerb = False;
         for i,tag in enumerate(pos):
-            if is_verb(tag) and self.c.ID.isBeingVerb(tok[i]):
-                self.rearrangeBV(i);
-                return True;
+            if is_verb(tag):
+                if self.c.ID.isBeingVerb(tok[i]) and seenVerb == False:
+                    self.rearrangeBV(i);
+                    return True;
+                seenVerb = True;
         return False;
 
     def make(self,sentence):
