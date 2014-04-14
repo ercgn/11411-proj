@@ -53,6 +53,9 @@ def is_adj(tag):
 def is_num(tag):
     return (tag[:2] == "CD")
 
+def is_propN(tag):
+    return (tag == "NNP");
+
 # E: Custom Tags used for the answering driver.
 def is_syn(tag):
     return (tag == "SYN")
