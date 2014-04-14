@@ -29,8 +29,6 @@ def parseFileToSentences(file_name):
     data = fp.read()
     data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
 
-
-
     sentences = []
     for para in data.split('\n'):
         if para:

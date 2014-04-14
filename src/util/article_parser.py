@@ -80,9 +80,14 @@ class MyHTMLParser(HTMLParser):
 
     def grabTextSentenceList(self):
         sentList = nltk_helper.parseTextToSentences(self.articleText)
+        toRemove = []
         for i in xrange(len(sentList)):
+            if "(disambiguation)" in sentList[i]:
+                toRemove.append(sentList[i])
             sentList[i] = sentList[i].replace("[citation\xc2\xa0needed] ", "")
             sentList[i] = sentList[i].replace("[page\xc2\xa0needed] ", "")
+        for sent in toRemove:
+            sentList.remove(sent)
         return sentList
 
     def grabTokList(self):
@@ -96,9 +101,14 @@ class MyHTMLParser(HTMLParser):
         sentDict = dict()
         for key in self.topicDict:
             sentDict[key] = nltk_helper.parseTextToSentences(self.topicDict[key])
+            toRemove = []
             for i in xrange(len(sentDict[key])):
+                if "(disambiguation)" in sentDict[key][i]:
+                    toRemove.append(sentDict[key][i])
                 sentDict[key][i] = sentDict[key][i].replace("[citation\xc2\xa0needed] ", "")
                 sentDict[key][i] = sentDict[key][i].replace("[page\xc2\xa0needed] ", "")
+            for sent in toRemove:
+                sentDict[key].remove(sent)
         return sentDict
     
     #Returns a list of topics (assumed to be h2-tagged) for the article
