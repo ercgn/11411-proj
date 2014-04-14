@@ -233,8 +233,10 @@ class ConstructQuestion(object):
             preVerb[0] = wordToLower(preVerb[0]);
             # break at commas if necessary
             newTok, newTag= self.splitCommaBare(preVerb,pos[:vbIdx], False);
-            if newTok != preVerb:
-                saveIdx, preVerb = self.findTag(newTok,newTag,"NOUN");
+            if newTok != preVerb and newTok != None and newTag != None:
+                out = self.findTag(newTok,newTag,"NOUN");
+                if out != None:
+                    saveIdx, preVerb = out;
         # end of sentence
         if vbIdx < len(tok)-1:
             postVerb = makeList(tok[vbIdx+1:]);
