@@ -37,7 +37,9 @@ subPronouns = set(['he','she','we','they','i']);
 objPronouns = set(['her','him','me','us','them']);
 posPronouns = set(['their','his','her','our','my']);
 beingV = set(['is','are','was','were']);
-
+# from wikipedia
+states = set(['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']);
+countries = set([]);
 ## REGULAR EXPRESSION STRINGS
 # (note there is an alernative way of savying the expression,
 # but that is mostly applied when used multiple times)
@@ -95,6 +97,18 @@ class Identity(object):
 
     def isLinkVerb(self,word):
         return word.lower() in linkVerb;
+
+    def isPlace(self, first, second):
+        (firstTok, firstTag) = first;
+        (secondTok, secondTag) = second;
+        state = False;
+        country = False;
+        if is_propN(firstTag) and is_propN(secondTag):
+            state = secondTok in states;
+            country = secondTok in countries;
+            return state or country;
+        else:
+            return False;
 
     # timewords: today, friday, yesterday, etc
     def isTemporal(self, word):
