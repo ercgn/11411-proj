@@ -59,8 +59,9 @@ class MyHTMLParser(HTMLParser):
         if tag in self.tagsToRead:
             self.articleText += " "
             self.curTopicBuf += " "
-        if self.tagList.pop() != tag:
-            raise Exception("Error! Tag mismatch! Aborting...")
+        popTag = self.tagList.pop()
+        if popTag != tag:
+            raise Exception("Error! Tag mismatch '%s' and '%s'! Aborting..." % (tag, popTag))
     
     def handle_data(self, data):
         if "title" in self.tagList:
