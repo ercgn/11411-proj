@@ -79,7 +79,10 @@ class MyHTMLParser(HTMLParser):
         return self.articleText.decode("utf-8")
 
     def grabTextSentenceList(self):
-        return nltk_helper.parseTextToSentences(self.articleText)
+        sentList = nltk_helper.parseTextToSentences(self.articleText)
+        for sent in sentList:
+            sent = sent.replace("[citation needed]", "")
+        return sentList
 
     def grabTokList(self):
         return nltk.word_tokenize(self.grabText())
@@ -92,6 +95,8 @@ class MyHTMLParser(HTMLParser):
         sentDict = dict()
         for key in self.topicDict:
             sentDict[key] = nltk_helper.parseTextToSentences(self.topicDict[key])
+            for sent in sentDict[key]:
+                sent = sent.replace("[citation needed]", "")
         return sentDict
     
     #Returns a list of topics (assumed to be h2-tagged) for the article
