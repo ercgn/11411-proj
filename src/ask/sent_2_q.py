@@ -27,16 +27,57 @@ class ConstructQuestion(object):
         self.c = Combine();
         self.tokens = nltk.word_tokenize(sentence.strip());
         self.tags = rdrpos.pos_tag(sentence.strip());
-         # check if capitaliaztion is necessary and otherwise remove.
+        # check if capitaliaztion is necessary and otherwise remove.
         self.nltkTags = nltk.pos_tag(self.tokens);
         if (self.nltkTags[0] != self.tags[0]) and \
            self.c.ID.isReplacablePronoun(self.tokens[0]):
             self.tokens[0] = self.tokens[0].lower();
+        # remove end puncuation
+        self.tokens, self.tags = self.rmEndPunc(self.tokens, self.tags);
         # returned question / question word
         self.out = "";
         self.qWord = None;
         self.N = len(self.tokens);
         self.make(sentence);
+
+    def reportionCommaLists(self, tokList, tagList, idxList=None):
+        rmList = [];
+        for i,item in enumerate(tagList[:-1]):
+            nextItem = tagList[i+1];
+            firstWord = nextItem[0];
+            lastTag = item[-1];
+            lastWord = None;
+            if self.c.ID.isEndPhrasePunc(lastTag) and len(item) >= 2:
+                lastWord = item[-2];
+            elif len(item) >= 2:
+                lastWord = item[-1];
+            if lastWord != None and\
+               (is_adj(lastWord) and is_adj(firstWord)):
+                tagList[i+1] = item + nextItem;
+                tokList[i+1] = tokList[i] + tokList[i+1];
+                rmList.append(i);
+            elif lastWord != None and\
+                 (is_propN(lastWord) and is_propN(firstWord)):
+                second = (tokList[i+1][0],firstWord);
+                first = (tokList[i][-2],lastWord);
+                if self.c.ID.isPlace(first,second):
+                    tagList[i+1] = item + nextItem;
+                    tokList[i+1] = tokList[i] + tokList[i+1];
+                    rmList.append(i);
+        offset = 0;
+        if rmList != []:
+            for idx in rmList:
+                adjI = idx-offset;
+                tokList[adjI];
+                tokList.pop(adjI);
+                tagList.pop(adjI);
+                if idxList != None:
+                    idxList.pop(adjI);
+                offset += 1;
+        if idxList != None:
+            return tokList, tagList,idxList;
+        else:
+            return tokList, tagList;
 
     # Split the tokens and tags into phrases based on commas
     # or other ending punc such as ;.?
@@ -98,10 +139,12 @@ class ConstructQuestion(object):
         if incpEnd:
             newTok.append(saveTok);
             newTag.append(saveTag);
+        # redo comma lists based on countries, adjective lists.
+        outTok, outTag, outIdxs = self.reportionCommaLists(newTok,newTag,idxs);
         if idxFlag:
-            return newTok,newTag, idxs;
+            return outTok,outTag, idxs;
         else:
-            return newTok,newTag;
+            return outTok,outTag;
 
     # Arranges a question when the question word is preceeded by a verb
     def verbPreArr(self, tok, qIdx):
@@ -176,7 +219,6 @@ class ConstructQuestion(object):
             return False;
         pos = self.tags;
         tok = self.tokens;        
-        self.rmEndPunc(tok);
         verb = tok[vbIdx];
         preVerb = [];
         postVerb = [];
@@ -223,11 +265,13 @@ class ConstructQuestion(object):
 
     # rmEndPunc - remove end punction from the given token string
     # DOES NOT REMOVE from the associated pos, unless run on that separately
-    def rmEndPunc(self,tok):
-        punc = tok[-1];
-        if self.c.ID.isEndPhrasePunc(punc):
-            x = tok.pop(-1);
-        return;
+    def rmEndPunc(self,tok, tag):
+        if isinstance(tok, list):
+            punc = tok[-1];
+            if self.c.ID.isEndPhrasePunc(punc):
+                x = tok.pop(-1);
+                y = tag.pop(-1);
+        return tok, tag;
 
     # rearranges sentences to flow more naturally
     def formatQuestion(self):
@@ -248,7 +292,6 @@ class ConstructQuestion(object):
             else:
                 tok = phraseTok;
                 pos = phraseTag;
-            self.rmEndPunc(tok);
             (qIdx, wrd) = self.qWord;
             qIdx = qIdx - idxOffset;
             if qIdx != 0:
@@ -462,7 +505,6 @@ class ConstructQuestion(object):
         combi = self.c;
         toks = self.tokens;
         pos = self.tags;
-
         # find date locations and replace them in the given, toks, pos
         # gives dates the tag "#DATE"
         combi.dates(toks, pos);
