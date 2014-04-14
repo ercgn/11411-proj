@@ -56,7 +56,8 @@ class Combine(object):
         rmList = [];
         for i,word in enumerate(wordList):
             if i > 0: 
-                if word == "," or word[0] == "'" or word == "." or word == '?':
+                if word == "," or word[0] == "'" \
+                   or word == "." or word == '?':
                     prev = wordList[i-1];
                     prev += word;
                     wordList[i-1] = prev;

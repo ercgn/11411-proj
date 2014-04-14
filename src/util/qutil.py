@@ -68,8 +68,15 @@ def wordToLower(word):
     tagl = rdrpos.pos_tag(word.lower());
     if tagU == tagl:
         return word.lower();
+    if tagU == "RB" or tagl == "RB":
+        return word.lower();
     return word;
 
+def makeList(inputPhrase):
+    if isinstance(inputPhrase, list):
+        return inputPhrase;
+    else:
+        return [inputPhrase];
 
 # Returns True if the string s can reasonably be described as a sentence
 # There are many metrics to decide whether a string is a sentence;

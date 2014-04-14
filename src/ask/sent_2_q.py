@@ -47,17 +47,30 @@ class ConstructQuestion(object):
         pos = self.tags;
         if ',' not in set(tok):
             return tok,pos, (-1,0);
+        newTok, newTag, idxs = self.splitCommaBare(tok, pos, True);
+        idxs.append(len(tok));
+        (qIdx, qWord) = self.qWord;
+        for idx in range(len(idxs)-1):
+            if idxs[idx] <= qIdx and qIdx < idxs[idx+1]: 
+                return (newTok, newTag, (idx, idxs[idx]));
+        return newTok, newTag, (0,0);
+
+    def splitCommaBare(self, tok, pos, idxFlag):
+        if ',' not in set(tok):
+            if idxFlag: return tok, pos, False;
+            else: return tok,pos;
         saveTag = [];
         saveTok = [];
         newTok = [];
         newTag = [];
         idxs = [];
+        endComma = False;
         idxs.append(0);
         for i,word in enumerate(tok):
             if not self.c.ID.isEndPhrasePunc(word):
-#                if 1 < i and i < len(tok)-1 and pos[i-1] == "JJ" and pos[i+1] == "JJ": 
                 saveTok.append(word);
                 saveTag.append(pos[i]);
+                endComma = True;
             else:
                 idxs.append(i+1);
                 saveTok.append(word);
@@ -66,21 +79,24 @@ class ConstructQuestion(object):
                 newTag.append(saveTag);
                 saveTok = [];
                 saveTag = [];
-        idxs.append(len(tok));
-        (qIdx, qWord) = self.qWord;
-        for idx in range(len(idxs)-1):
-            if idxs[idx] <= qIdx and qIdx < idxs[idx+1]: 
-                return (newTok, newTag, (idx, idxs[idx]));
-        return newTok, newTag, (0,0);
+                endComma = False;
+        if endComma:
+            newTok.append(saveTok);
+            newTag.append(saveTag);
+        if idxFlag:
+            return newTok,newTag, idxs;
+        else:
+            return newTok,newTag;
 
     # Arranges a question when the question word is preceeded by a verb
     def verbPreArr(self, tok, qIdx):
         qTok = [];
         beginning = tok[qIdx:];
-        if isinstance(beginning,list):
-            qTok += beginning;
-        else:
-            qTok += [beginning];
+        qTok += makeList(beginning);
+#        if isinstance(beginning,list):
+#            qTok += beginning;
+#        else:
+#            qTok += [beginning];
 #        qTok += [tok[qIdx-1]];
         if qIdx-1 > 0:
             tok[0] = wordToLower(tok[0]);
@@ -119,6 +135,23 @@ class ConstructQuestion(object):
             qTok += tok[0:qIdx];
         return qTok;
 
+    # checks the comma delineated sections for a given pos tag
+    # uses the key "NOUN" to indicate any noun and
+    # "VERB" to indicate any verb (avoids function pointers)
+    # returns the index into the comma list of the first find
+    # as well as the found item (a list);
+    def findTag(self,newTokList,newTagList, tagCode):
+        saveIdx = None;
+        for i, phrase in enumerate(newTagList):
+            for tag in phrase:
+                if (tagCode == "NOUN" and is_noun(tag)) or\
+                   (tagCode == "VERB" and is_verb(tag)) or\
+                   (tag == tagCode):
+                    found = makeList(newTokList[i]);
+                    saveIdx = i;
+                    break;         
+        return saveIdx, found;
+
     # rearrangeBV - rearrange a sentence when a being verb is present
     # so that the question reads [verb] [beinning] [end] ?
     # (Forms yes questions without adding / changing word tokens)
@@ -128,27 +161,34 @@ class ConstructQuestion(object):
         pos = self.tags;
         tok = self.tokens;        
         self.rmEndPunc(tok);
-        # splicing sentence
+
         verb = tok[vbIdx];
-        begining = [];
-        end = [];
+        preVerb = [];
+        postVerb = [];
+        qTok = [];
+        saveIdx = None;
+        newTok = None;
         # start of sentence
         if vbIdx > 0:
-            beginning = tok[:vbIdx];
-            if isinstance(beginning,str):
-                beginning = wordToLower(beginning);
-                beginning = [beginning];
-            else:
-                beginning[0] = wordToLower(beginning[0]);
+            preVerb = makeList(tok[:vbIdx]);
+            preVerb[0] = wordToLower(preVerb[0]);
+            # break at commas if necessary
+            newTok, newTag= self.splitCommaBare(preVerb,pos[:vbIdx], False);
+            if newTok != preVerb:
+                saveIdx, preVerb = self.findTag(newTok,newTag,"NOUN");
         # end of sentence
         if vbIdx < len(tok)-1:
-            end = tok[vbIdx+1:];
-            if isinstance(end,str):
-                end = [end];
-        qTok = [verb] + beginning + end;
+            postVerb = makeList(tok[vbIdx+1:]);
+        # put phrases w/o subject first
+        if newTok != None and saveIdx != None:
+            for phrase in newTok:
+                if phrase != newTok[saveIdx]:
+                    qTok += phrase;
+        # "meat" of the setence
+        qTok += [verb] + preVerb + postVerb;
         # formatting output
         self.joinQ(qTok);
-        return;
+        return True;
 
     # If the question is a "who" question,
     # remove a trailing article before "who" in the output,
@@ -163,7 +203,7 @@ class ConstructQuestion(object):
                     toks.pop(idx-1);
                     tags.pop(idx-1);
                     self.qWord = (idx-1,word);
-                    return
+                    return;
         return;
         
     def rmEndPunc(self,tok):
@@ -394,10 +434,11 @@ class ConstructQuestion(object):
 #        print "pos:: ",self.tags;
         # check for context based on timing (might require change of verb)
 #        timeFlag = combi.ID.isTimeDep(toks,0);
-        """
+        
         if toks[0].lower() == "if":
             self.ifQ();
             return;
+        """
         if self.N < 15 and self.qFromDate(): 
             self.formatQuestion();
             return;
