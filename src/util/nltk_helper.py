@@ -29,6 +29,8 @@ def parseFileToSentences(file_name):
     data = fp.read()
     data = data.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')
 
+
+
     sentences = []
     for para in data.split('\n'):
         if para:
@@ -47,7 +49,6 @@ def parseTextToSentences(text):
         if para:
             sentences.extend(sentence_splitter.tokenize(para))
     return sentences
-
 
 def getSynonyms(word):
     syns = wordnet.synsets(word)
