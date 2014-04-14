@@ -194,6 +194,8 @@ class ConstructQuestion(object):
     def findTag(self,newTokList,newTagList, tagCode):
         saveIdx = [];
         found = False;
+        if newTokList == None or newTagList == None:
+            return None;
         for i, phrase in enumerate(newTagList):
             for tag in phrase:
                 # found condition, save phrase
@@ -506,6 +508,8 @@ class ConstructQuestion(object):
         combi = self.c;
         toks = self.tokens;
         pos = self.tags;
+        if toks == [] or pos == []:
+            return;
         # find date locations and replace them in the given, toks, pos
         # gives dates the tag "#DATE"
         combi.dates(toks, pos);
