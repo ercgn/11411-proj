@@ -33,6 +33,7 @@ from util.article_parser import MyHTMLParser
 
 import util.qutil as qutil
 import nltk
+import traceback
 import sys
 
 ### CONSTANTS ###
@@ -96,7 +97,8 @@ if __name__ == "__main__":
             except Exception, msg:
                 sys.stderr.write('WARNING: Exception in constructing question!\n')
                 sys.stderr.write('Please track this down and figure out what went wrong\n')
-                sys.stderr.write(str(msg) + '\n')
+#                sys.stderr.write(str(msg) + '\n')
+                traceback.print_exc(file=sys.stderr)
                 continue
             # Successfully constructed a question q
             qToks = nltk.word_tokenize(q.strip())
@@ -117,7 +119,8 @@ if __name__ == "__main__":
         
     except IOError, msg:
         sys.stderr.write("An I/O error occurred while processing the article.  Details:\n")
-        sys.stderr.write(str(msg) + '\n')
+#        sys.stderr.write(str(msg) + '\n')
+        traceback.print_exc(file=sys.stderr)
     
     finally :
         # Cleanup
