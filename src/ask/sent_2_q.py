@@ -299,7 +299,7 @@ class ConstructQuestion(object):
                 if is_verb(pos[qIdx-1]):
                     qTok = self.verbPreArr(tok,qIdx);
                 # question word preceeds a verb
-                elif qIdx < len(tok) and \
+                elif qIdx < len(tok)-1 and \
                      (is_verb(pos[qIdx+1]) or pos[qIdx+1] == "MD"):
                     qTok = self.verbPostArr(tok,qIdx,pos);
                 # question word in preposition etc
