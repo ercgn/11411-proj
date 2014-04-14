@@ -59,8 +59,9 @@ class MyHTMLParser(HTMLParser):
         if tag in self.tagsToRead:
             self.articleText += " "
             self.curTopicBuf += " "
-        if self.tagList.pop() != tag:
-            raise Exception("Error! Tag mismatch! Aborting...")
+        popTag = self.tagList.pop()
+        if popTag != tag:
+            raise Exception("Error! Tag mismatch '%s' and '%s'! Aborting..." % (tag, popTag))
     
     def handle_data(self, data):
         if "title" in self.tagList:
@@ -78,7 +79,16 @@ class MyHTMLParser(HTMLParser):
         return self.articleText.decode("utf-8")
 
     def grabTextSentenceList(self):
-        return nltk_helper.parseTextToSentences(self.articleText)
+        sentList = nltk_helper.parseTextToSentences(self.articleText)
+        toRemove = []
+        for i in xrange(len(sentList)):
+            if "(disambiguation)" in sentList[i]:
+                toRemove.append(sentList[i])
+            sentList[i] = sentList[i].replace("[citation\xc2\xa0needed] ", "")
+            sentList[i] = sentList[i].replace("[page\xc2\xa0needed] ", "")
+        for sent in toRemove:
+            sentList.remove(sent)
+        return sentList
 
     def grabTokList(self):
         return nltk.word_tokenize(self.grabText())
@@ -91,6 +101,14 @@ class MyHTMLParser(HTMLParser):
         sentDict = dict()
         for key in self.topicDict:
             sentDict[key] = nltk_helper.parseTextToSentences(self.topicDict[key])
+            toRemove = []
+            for i in xrange(len(sentDict[key])):
+                if "(disambiguation)" in sentDict[key][i]:
+                    toRemove.append(sentDict[key][i])
+                sentDict[key][i] = sentDict[key][i].replace("[citation\xc2\xa0needed] ", "")
+                sentDict[key][i] = sentDict[key][i].replace("[page\xc2\xa0needed] ", "")
+            for sent in toRemove:
+                sentDict[key].remove(sent)
         return sentDict
     
     #Returns a list of topics (assumed to be h2-tagged) for the article
