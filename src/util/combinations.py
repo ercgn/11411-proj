@@ -69,6 +69,9 @@ class Combine(object):
         sentence = " ".join(wordList);
         return sentence;
 
+    # given a list of locations, joins the words and uses the 
+    # string replaceStr as the new tag
+    # locations are of the form (start index, length)
     def joinWordTag(self, locations, replaceStr):
         if self.words == None or self.tags == None:
             return 0;
@@ -107,6 +110,8 @@ class Combine(object):
         self.nltkTags = None;
         return;
 
+    # finds names, and combines into singal entity
+    # tries to a sort of named entity grouping based on capitalization
     def names(self, words, tags):
         pNameLoc = self.ID.findNER(words,tags);
         self.words = words;

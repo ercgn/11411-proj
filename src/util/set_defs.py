@@ -65,6 +65,8 @@ class Identity(object):
     def isEndPhrasePunc(self,word):
         return word.lower() in endPhrasePunc;
 
+    # "replaceable" means it is a subject or object
+    #  returns 0 as "false"
     def isReplacablePronoun(self,word):
         if word.lower() in subPronouns:
             return 1;
@@ -222,6 +224,7 @@ class Identity(object):
 
     # now deprecated with the above changes
     # used to find NamePrefix First Name, Last Name
+    """
     def findNm(self, wordList, tagList):
         prevTag = tagList[0];
         locations = [];
@@ -238,4 +241,4 @@ class Identity(object):
                     if lenPropPhrase > 0:
                         locations.append((idx-1,lenPropPhrase));
             prevTag = tag;
-        return locations;
+        return locations;"""

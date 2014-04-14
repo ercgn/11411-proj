@@ -63,6 +63,10 @@ def is_custom(tag):
 def is_high_priority(tag):
     return (tag == "HGH")
 
+# outputs the lowercase version of a word
+# if the word tag does not depend on capitalization
+# also automatically changes adverbs to lowercase
+# in the case of "However, Finally",etc
 def wordToLower(word):
     tagU = rdrpos.pos_tag(word);
     tagl = rdrpos.pos_tag(word.lower());
@@ -72,6 +76,10 @@ def wordToLower(word):
         return word.lower();
     return word;
 
+# takes an input as returns as a list
+# if the input is already a list, will return input
+# otherwise, will turn into a list, so we can do consistent
+# appending / joining
 def makeList(inputPhrase):
     if isinstance(inputPhrase, list):
         return inputPhrase;
