@@ -312,11 +312,12 @@ class ConstructQuestion(object):
                 if pSel != -1 and i != pSel:
                     qTok += ",";
                     addPhrase = phrase[0:-1];
-                    tokTags = rdrpos.pos_tag("".join(addPhrase[0]));
-                    if tokTags[0] != "NNP":
-                        addPhrase[0] = addPhrase[0].lower();
-                    if len(addPhrase) > 1:
-                        qTok += addPhrase;
+                    if addPhrase != []:
+                        tokTags = rdrpos.pos_tag("".join(addPhrase[0]));
+                        if tokTags[0] != "NNP":
+                            addPhrase[0] = addPhrase[0].lower();
+                        if len(addPhrase) > 1:
+                            qTok += addPhrase;
             self.joinQ(qTok);
             return;
 
@@ -462,7 +463,7 @@ class ConstructQuestion(object):
             return False;
         # split on first comma (associated with "if") 
         idx = pos.index(",");
-        if idx < len(pos) - 1:
+        if idx < (len(pos)-1):
             subTok = tok[idx+1:];
             subPos = pos[idx+1:];
             # find the first verb modifier to be used in question
