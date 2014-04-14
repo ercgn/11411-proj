@@ -16,9 +16,10 @@ import nltk, string
 from util.combinations import Combine
 from util.qutil import *
 
-# "easy" cases to replace:
+# cases to replace:
 #   dates -> when
-#   numbers -> how many [noun] [verb phrase]?
+#   if -> why question with the if section as the clause
+#   noun / proper noun / pronoun replacement
 #   names / proper nouns
 
 class ConstructQuestion(object):
@@ -26,11 +27,12 @@ class ConstructQuestion(object):
         self.c = Combine();
         self.tokens = nltk.word_tokenize(sentence.strip());
         self.tags = rdrpos.pos_tag(sentence.strip());
+         # check if capitaliaztion is necessary and otherwise remove.
         self.nltkTags = nltk.pos_tag(self.tokens);
-        # check if capitaliaztion is necessary and otherwise remove. 
         if (self.nltkTags[0] != self.tags[0]) and \
            self.c.ID.isReplacablePronoun(self.tokens[0]):
             self.tokens[0] = self.tokens[0].lower();
+        # returned question / question word
         self.out = "";
         self.qWord = None;
         self.N = len(self.tokens);
@@ -45,18 +47,26 @@ class ConstructQuestion(object):
     def splitComma(self):
         tok = self.tokens;
         pos = self.tags;
+        # not necessary to split indicated by -1 ouput
         if ',' not in set(tok):
             return tok,pos, (-1,0);
-        newTok, newTag, idxs = self.splitCommaBare(tok, pos, True);
-        idxs.append(len(tok));
+        tokCommaList, tagCommaList, idxs = self.splitCommaBare(tok, pos, True);
+        # list of indicdes that indicate splitted phrase in the original
+        idxs.append(len(tok)); 
         (qIdx, qWord) = self.qWord;
+        # find the index of the comma phrase that contains the question word
         for idx in range(len(idxs)-1):
             if idxs[idx] <= qIdx and qIdx < idxs[idx+1]: 
-                return (newTok, newTag, (idx, idxs[idx]));
-        return newTok, newTag, (0,0);
+                return (tokCommaList, tagCommaList, (idx, idxs[idx]));
+        return tokCommaList, tagCommaList, (0,0);
 
+    # splitCommaBare - split the input into list of components 
+    # based on comma / end punctuation placement
+    # takes in the tok, associated pos tags, and
+    # idxFlag which indicates whether or not the output should include
+    # a list of where the original lists were split
     def splitCommaBare(self, tok, pos, idxFlag):
-        if ',' not in set(tok):
+        if ',' not in set(tok) or (len(tok) != len(pos)):
             if idxFlag: return tok, pos, False;
             else: return tok,pos;
         saveTag = [];
@@ -64,14 +74,17 @@ class ConstructQuestion(object):
         newTok = [];
         newTag = [];
         idxs = [];
-        endComma = False;
+        incpEnd = False;
         idxs.append(0);
         for i,word in enumerate(tok):
+            # not comma, part of same phrase
             if not self.c.ID.isEndPhrasePunc(word):
                 saveTok.append(word);
                 saveTag.append(pos[i]);
-                endComma = True;
-            else:
+                incpEnd = True;
+            # comma / end punction, add section to ouput list
+            # reset temp save
+            else:                
                 idxs.append(i+1);
                 saveTok.append(word);
                 saveTag.append(pos[i]);
@@ -79,8 +92,10 @@ class ConstructQuestion(object):
                 newTag.append(saveTag);
                 saveTok = [];
                 saveTag = [];
-                endComma = False;
-        if endComma:
+                incpEnd = False;
+        # if the original input did not have final end punction
+        # ensures we get the last of the input included
+        if incpEnd:
             newTok.append(saveTok);
             newTag.append(saveTag);
         if idxFlag:
@@ -93,10 +108,6 @@ class ConstructQuestion(object):
         qTok = [];
         beginning = tok[qIdx:];
         qTok += makeList(beginning);
-#        if isinstance(beginning,list):
-#            qTok += beginning;
-#        else:
-#            qTok += [beginning];
 #        qTok += [tok[qIdx-1]];
         if qIdx-1 > 0:
             tok[0] = wordToLower(tok[0]);
@@ -121,10 +132,7 @@ class ConstructQuestion(object):
                 else:
                     qTok += beginning;            
             end = qPart[1:];
-            if isinstance(end,str):
-                qTok += [end];
-            else:
-                qTok += end;
+            qTok += makeList(end);
         else:
             qTok += [qPart];
         # does not copy the first word if what is the second word
@@ -141,16 +149,24 @@ class ConstructQuestion(object):
     # returns the index into the comma list of the first find
     # as well as the found item (a list);
     def findTag(self,newTokList,newTagList, tagCode):
-        saveIdx = None;
+        saveIdx = [];
+        found = False;
         for i, phrase in enumerate(newTagList):
             for tag in phrase:
+                # found condition, save phrase
                 if (tagCode == "NOUN" and is_noun(tag)) or\
                    (tagCode == "VERB" and is_verb(tag)) or\
                    (tag == tagCode):
-                    found = makeList(newTokList[i]);
-                    saveIdx = i;
-                    break;         
-        return saveIdx, found;
+                    found = True;
+            if found:
+                saveIdx.append(i);
+            found = False;
+        # no find, return None
+        if saveIdx == []:
+            return None;
+        # something found, return last find (closest to verb);
+        else:            
+            return saveIdx[-1],makeList(newTokList[saveIdx[-1]]);
 
     # rearrangeBV - rearrange a sentence when a being verb is present
     # so that the question reads [verb] [beinning] [end] ?
@@ -161,7 +177,6 @@ class ConstructQuestion(object):
         pos = self.tags;
         tok = self.tokens;        
         self.rmEndPunc(tok);
-
         verb = tok[vbIdx];
         preVerb = [];
         postVerb = [];
@@ -205,7 +220,9 @@ class ConstructQuestion(object):
                     self.qWord = (idx-1,word);
                     return;
         return;
-        
+
+    # rmEndPunc - remove end punction from the given token string
+    # DOES NOT REMOVE from the associated pos, unless run on that separately
     def rmEndPunc(self,tok):
         punc = tok[-1];
         if self.c.ID.isEndPhrasePunc(punc):
@@ -221,6 +238,7 @@ class ConstructQuestion(object):
         #### currently everything is reattached later
         if self.qWord == None:
             self.out = "";
+            return;
         else:
             self.removeLeadingArticle();
             (phraseTok, phraseTag, (pSel,idxOffset)) = self.splitComma();
@@ -236,10 +254,10 @@ class ConstructQuestion(object):
             if qIdx != 0:
                 # question word follow a verb
                 if is_verb(pos[qIdx-1]):
-#                    print "pre";
                     qTok = self.verbPreArr(tok,qIdx);
                 # question word preceeds a verb
-                elif qIdx < len(tok) and (is_verb(pos[qIdx+1]) or pos[qIdx+1] == "MD"):
+                elif qIdx < len(tok) and \
+                     (is_verb(pos[qIdx+1]) or pos[qIdx+1] == "MD"):
                     qTok = self.verbPostArr(tok,qIdx,pos);
                 # question word in preposition etc
                 else: qTok = tok;
@@ -249,7 +267,6 @@ class ConstructQuestion(object):
             # add other details back into the question
             for i, phrase in enumerate(phraseTok):
                 if pSel != -1 and i != pSel:
-                    #print phrase;
                     qTok += ",";
                     addPhrase = phrase[0:-1];
                     tokTags = rdrpos.pos_tag("".join(addPhrase[0]));
@@ -264,24 +281,29 @@ class ConstructQuestion(object):
     # Set output and capitalization
     def joinQ(self, qTok):
         qTok += ['?'];
-        question = self.c.sentJoin(qTok);
+        # special join function to remove extra spaces
+        question = self.c.sentJoin(qTok); 
         # capitalize first letter
         self.out = question[0].upper() + question[1:];
         return;
 
     # creates question by replacing the first date
     # replaces with "what" or "what date" instead of "when" 
-    # because that seems to work better grammatically most of the time
+    # because that seems to work better grammatically most of the time    
+    # returns True on success, False on failure
     def qFromDate(self):
         tok = self.tokens;
         pos = self.tags;
         origN = self.N
         if "#DATE" in set(pos):
             idx = pos.index("#DATE");
+            # only year specified
             if len(tok[idx]) == 4:
                 tok[idx] = "what year";
+            # preposition case
             elif idx < len(tok)-1 and pos[idx+1] == "IN":
                 tok[idx] = "when";
+            # follows a verb
             elif idx > 0 and is_verb(pos[idx-1]):
                     tok[idx] = "what";
             else:
@@ -290,6 +312,7 @@ class ConstructQuestion(object):
             return True;
         else: return False;
 
+    # create a quation from a quantity value
     # error prone
     """
     def qFromQuant(self):
@@ -314,50 +337,69 @@ class ConstructQuestion(object):
             if phrase != []:
                 print phrase, phrasetok;
     """
-    # creates a question by replacing the first noun or pronoun 
-    # that preceeds a verb with "what or who" as appropriate"
+    # replaces the noun at the given index, idx with the
+    # appropriate question word
+    # returns True on success, False on failure 
     def replaceNounWithQ(self, idx):
         tok = self.tokens;
         pos = self.tags;
         nounTag = pos[idx];
         word = tok[idx];
+        # error with input, no noun to replace, erroneous index
+        if (idx < 0 or idx > len(pos)) or \
+           (not is_noun(nounTag) and nounTag != "PRP"):
+            return False;        
+        # proper noun replacement
         if (len(nounTag) > 2 and nounTag[0:3] == "NNP"):
             tok[idx] = "who or what";
+        # pronoun replacement
         elif nounTag == "PRP":
             pFlag = self.c.ID.isReplacablePronoun(word);
-            if pFlag == 1:
+            if pFlag == 1:  #subject
                 tok[idx] = "who";
-            elif pFlag == -1:
+            elif pFlag == -1: # object
                 tok[idx] = "whom";
-            elif pFlag == -2: 
+            elif pFlag == -2: # posessive
                 tok[idx] = "whose";
-            elif pFlag == 2:
+            elif pFlag == 2: # cannot specify (it, there)
                 tok[idx] = "what";
+            else:
+                return False;
+        # common noun replacement
         else:
             tok[idx] = "what";
+        # remove leading determiner if present
         if idx > 0 and pos[idx-1] == "DT":
             pos.pop(idx-1);
             tok.pop(idx-1);
             idx = idx -1;
+        # save the index of the question word (used in rearranging qurestion)
         self.qWord = (idx, tok[idx]);
-        return;
+        return True;
 
+    # replace the first noun / propernoun / pronoun that proceeds
+    # a verb with an appropriate question word
+    # returns True on successful replacement, False on failure
     def qFromNoun(self):
         pos = self.tags;
         lastCandidate = None;
         for i,tag in enumerate(pos):
+            # last noun / proper noun
             if is_noun(tag):
                 lastCandidate = i;
             elif tag == "PRP" and \
                  (self.c.ID.isReplacablePronoun(self.tokens[i]) != 0):
                 lastCandidate = i;
+            # found verb, take most recent candidate word
             elif is_verb(tag):
                 if lastCandidate != None:
-                    self.replaceNounWithQ(lastCandidate);
-                    return True;
+                    return self.replaceNounWithQ(lastCandidate);
         return False;
 
     # replace the first pronoun in the sentence with who
+    # not used because the version included in the noun replacement 
+    # works more grammatically
+    """
     def qFromPronoun(self):
         pos = self.tags;
         tok = self.tokens;
@@ -365,51 +407,41 @@ class ConstructQuestion(object):
             if tag == "PRP" and self.c.ID.isReplacablePronoun(tok[i]):
                 self.replaceNounWithQ(i);
                 return True;
-        return False;
+        return False;"""
 
+    # create simple questions by rearranging a sentence starting with if
+    # if "clause", [subset] -> why will [subset]
     def ifQ(self):
         pos = self.tags;
         tok = self.tokens;
+        # fail on lack of realization with construct
         if "," not in set(pos):
-            return "";
-        else:
-            idx = pos.index(",");
-            if idx < len(pos) - 1:
-                subTok = tok[idx+1:];
-                subPos = pos[idx+1:];
-                if "MD" in set(subPos):
-                    modVerbIdx = subPos.index("MD");
-                    modVerb = subTok[modVerbIdx]; 
-                    subset = subTok[:modVerbIdx];
-                    if modVerbIdx < len(pos) - 1:
-                        subset += subTok[modVerbIdx+1:];
-                else:
-                    modVerb = "will";
-                    subset = subTok;
-                subset = ["Why"] + [modVerb] + subset;
-                self.joinQ(subset);
-        return;
-    """
-    def qFromNoun(self):        
-        tok = self.tokens;
-        pos = self.tags;
-        for i,tag in enumerate(pos[0:-1]):
-            nextTag = pos[i+1];
-            if is_verb(nextTag):    
-                if is_noun(tag):
-                    if len(tag) > 2 and tag[0:3] == "NNP":
-                        tok[i] = "who";
-                    else:
-                        tok[i] = "what";
-                    self.keyVerb = (i+1,pos[i+1]);
-                    self.qWord = (i, tok[i]);
-                elif tag == "PRP":
-                    tok[i] = "who";
-                    self.keyVerb = (i+1, pos[i+1]);
-                    self.qWord = (i, tok[i]);
-                return True;
+            return False;
+        # split on first comma (associated with "if") 
+        idx = pos.index(",");
+        if idx < len(pos) - 1:
+            subTok = tok[idx+1:];
+            subPos = pos[idx+1:];
+            # find the first verb modifier to be used in question
+            if "MD" in set(subPos):
+                modVerbIdx = subPos.index("MD");
+                modVerb = subTok[modVerbIdx]; 
+                subset = subTok[:modVerbIdx];
+                if modVerbIdx < len(pos) - 1:
+                    subset += subTok[modVerbIdx+1:];
+            # if modifer cannot be found in question, 
+            # use general word "will"
+            else:
+                modVerb = "will";
+                subset = subTok;
+            subset = ["Why"] + [modVerb] + subset;
+            # combine tokens
+            self.joinQ(subset);
+            return True;
         return False;
-    """
+
+    # create simple yes / no questions from a sentence
+    # by siwtching the placement of the subject and the being verb
     def qYesNo(self):
         tok = self.tokens;
         pos = self.tags;
@@ -422,28 +454,32 @@ class ConstructQuestion(object):
                 seenVerb = True;
         return False;
 
+    # overall algorithm for creating questions
+    # includes combing portions of the input together
+    # heirarchy of sentence constructions:
+    #   if, yes/no, date, noun
     def make(self,sentence):
         combi = self.c;
         toks = self.tokens;
         pos = self.tags;
 
         # find date locations and replace them in the given, toks, pos
+        # gives dates the tag "#DATE"
         combi.dates(toks, pos);
+        # combine names into a single token,
+        # sort of an NER
         combi.names(toks, pos);
-#        print "TOKS: ",self.tokens;
-#        print "pos:: ",self.tags;
         # check for context based on timing (might require change of verb)
-#        timeFlag = combi.ID.isTimeDep(toks,0);
+        #timeFlag = combi.ID.isTimeDep(toks,0);
         
-        if toks[0].lower() == "if":
-            self.ifQ();
+        if toks[0].lower() == "if" and self.ifQ(): 
             return;
-        """
+        if self.qYesNo(): 
+            return;
         if self.N < 15 and self.qFromDate(): 
             self.formatQuestion();
             return;
         if self.qFromNoun(): 
             self.formatQuestion();
-            return;"""
-        self.qYesNo();
+            return;
         return;
