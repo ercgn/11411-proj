@@ -53,9 +53,9 @@ class ConstructQuestion(object):
                 lastWord = item[-1];
             if lastWord != None and\
                (is_adj(lastWord) and is_adj(firstWord)):
-                tagList[i+1] = item + nextItem;
-                tokList[i+1] = tokList[i] + tokList[i+1];
-                rmList.append(i);
+                 tagList[i+1] = item + nextItem;
+                 tokList[i+1] = tokList[i] + tokList[i+1];
+                 rmList.append(i);
             elif lastWord != None and\
                  (is_propN(lastWord) and is_propN(firstWord)):
                 second = (tokList[i+1][0],firstWord);
@@ -68,11 +68,11 @@ class ConstructQuestion(object):
         if rmList != []:
             for idx in rmList:
                 adjI = idx-offset;
-                tokList[adjI];
+#                tokList[adjI];
                 tokList.pop(adjI);
                 tagList.pop(adjI);
                 if idxList != None:
-                    idxList.pop(adjI);
+                    idxList.pop(adjI+1);
                 offset += 1;
         if idxList != None:
             return tokList, tagList,idxList;
@@ -125,7 +125,7 @@ class ConstructQuestion(object):
                 incpEnd = True;
             # comma / end punction, add section to ouput list
             # reset temp save
-            else:                
+            else:       
                 idxs.append(i+1);
                 saveTok.append(word);
                 saveTag.append(pos[i]);
@@ -300,7 +300,7 @@ class ConstructQuestion(object):
             qIdx = qIdx - idxOffset;
             if qIdx != 0:
                 # question word follow a verb
-                if is_verb(pos[qIdx-1]):
+                if qIdx > 1 and qIdx-1 < len(pos) and is_verb(pos[qIdx-1]):
                     qTok = self.verbPreArr(tok,qIdx);
                 # question word preceeds a verb
                 elif qIdx < len(tok)-1 and \
