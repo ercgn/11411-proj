@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# /afs/andrew.cmu.edu/usr6/ericgan/11411-proj/env11411/bin/python
+#!/afs/andrew.cmu.edu/usr6/ericgan/11411-proj/env11411/bin/python
 #
 # ask.py
 #

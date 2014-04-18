@@ -309,7 +309,7 @@ class Answer(object):
             if curQ == "": break
 
             #prints current question
-            #print "Q:", curQ
+            #sys.stderr.write("Q:" + str(curQ) + "\n")
             answer = None
 
             qInfo = QParser(curQ)
@@ -375,7 +375,7 @@ class Answer(object):
             elif "what" in questionList:
                 self.qType = "What"
                 answer = self.answerWhat(keyWordList)
-            elif "how" == questionList[0]:
+            elif len(questionList) != 0 and "how" == questionList[0]:
                 answer = self.answerMisc(keyWordList)
                 self.qType = "How"
             elif ("is" in questionList
@@ -400,8 +400,8 @@ if __name__ == '__main__':
     nltk.data.path.append('/afs/andrew.cmu.edu/usr6/ericgan/nltk_data')
     
     def printUsage():
-        print "Usage: python %s [articlefile] [quesitonfile]" % (sys.argv[0])
-        print "Ex. python %s ../data/set2/a4.htm ../testQ/aries_easy.txt" % (sys.argv[0])
+        print "Usage: ./answer.py [articlefile] [quesitonfile]"
+        print "Ex. ./answer.py ../data/set2/a4.htm ../testQ/aries_easy.txt" % (sys.argv[0])
         print "Demo: python %s DEMO" % (sys.argv[0])
         
     if len(sys.argv) == 1:
